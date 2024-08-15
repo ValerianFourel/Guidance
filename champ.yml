@@ -1,0 +1,18 @@
+# conda environments:
+#
+base                     /home/vfourel/miniconda3
+4D-humans                /home/vfourel/miniconda3/envs/4D-humans
+amass                    /home/vfourel/miniconda3/envs/amass
+blender                  /home/vfourel/miniconda3/envs/blender
+champv2               *  /home/vfourel/miniconda3/envs/champv2
+cuml_dev                 /home/vfourel/miniconda3/envs/cuml_dev
+flare                    /home/vfourel/miniconda3/envs/flare
+hhcenv39                 /home/vfourel/miniconda3/envs/hhcenv39
+llama3                   /home/vfourel/miniconda3/envs/llama3
+llava                    /home/vfourel/miniconda3/envs/llava
+llmExperiments           /home/vfourel/miniconda3/envs/llmExperiments
+minigptv                 /home/vfourel/miniconda3/envs/minigptv
+prompting                /home/vfourel/miniconda3/envs/prompting
+rapidsai                 /home/vfourel/miniconda3/envs/rapidsai
+stable                   /home/vfourel/miniconda3/envs/stable
+

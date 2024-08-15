@@ -1,0 +1,244 @@
+2024-08-14 18:51:49,553 INFO    StreamThr :932612 [internal.py:wandb_internal():85] W&B internal server running at pid: 932612, started at: 2024-08-14 18:51:49.550598
+2024-08-14 18:51:49,556 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status
+2024-08-14 18:51:49,566 INFO    WriterThread:932612 [datastore.py:open_for_write():87] open: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/run-m6cvo2ej.wandb
+2024-08-14 18:51:49,568 DEBUG   SenderThread:932612 [sender.py:send():391] send: header
+2024-08-14 18:51:49,613 DEBUG   SenderThread:932612 [sender.py:send():391] send: run
+2024-08-14 18:51:50,058 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: check_version
+2024-08-14 18:51:50,080 INFO    SenderThread:932612 [dir_watcher.py:__init__():211] watching files in: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files
+2024-08-14 18:51:50,080 INFO    SenderThread:932612 [sender.py:_start_run_threads():1200] run started: m6cvo2ej with start time 1723654309.556029
+2024-08-14 18:51:50,080 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: check_version
+2024-08-14 18:51:50,225 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: run_start
+2024-08-14 18:51:50,374 DEBUG   HandlerThread:932612 [system_info.py:__init__():26] System info init
+2024-08-14 18:51:50,375 DEBUG   HandlerThread:932612 [system_info.py:__init__():41] System info init done
+2024-08-14 18:51:50,375 INFO    HandlerThread:932612 [system_monitor.py:start():194] Starting system monitor
+2024-08-14 18:51:50,375 INFO    SystemMonitor:932612 [system_monitor.py:_start():158] Starting system asset monitoring threads
+2024-08-14 18:51:50,380 INFO    HandlerThread:932612 [system_monitor.py:probe():214] Collecting system info
+2024-08-14 18:51:50,382 INFO    SystemMonitor:932612 [interfaces.py:start():188] Started cpu monitoring
+2024-08-14 18:51:50,384 INFO    SystemMonitor:932612 [interfaces.py:start():188] Started disk monitoring
+2024-08-14 18:51:50,386 INFO    SystemMonitor:932612 [interfaces.py:start():188] Started gpu monitoring
+2024-08-14 18:51:50,386 INFO    SystemMonitor:932612 [interfaces.py:start():188] Started memory monitoring
+2024-08-14 18:51:50,387 INFO    SystemMonitor:932612 [interfaces.py:start():188] Started network monitoring
+2024-08-14 18:52:04,367 DEBUG   HandlerThread:932612 [system_info.py:probe():152] Probing system
+2024-08-14 18:52:04,409 DEBUG   HandlerThread:932612 [system_info.py:_probe_git():137] Probing git
+2024-08-14 18:52:04,450 DEBUG   HandlerThread:932612 [system_info.py:_probe_git():145] Probing git done
+2024-08-14 18:52:04,450 DEBUG   HandlerThread:932612 [system_info.py:probe():200] Probing system done
+2024-08-14 18:52:04,450 DEBUG   HandlerThread:932612 [system_monitor.py:probe():223] {'os': 'Linux-5.15.0-89-generic-x86_64-with-glibc2.35', 'python': '3.10.14', 'heartbeatAt': '2024-08-14T16:52:04.374484', 'startedAt': '2024-08-14T16:51:49.502524', 'docker': None, 'cuda': None, 'args': (), 'state': 'running', 'program': '/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py', 'codePathLocal': 'train_text_to_image.py', 'codePath': 'train_text_to_image.py', 'git': {'remote': 'https://github.com/ValerianFourel/Guidance.git', 'commit': '216dc9aa7c39f00c3382343c346110736ba34416'}, 'email': None, 'root': '/lustre/home/vfourel/FaceGPT/Champ/Guidance', 'host': 'g171', 'username': 'vfourel', 'executable': '/home/vfourel/miniconda3/envs/champv2/bin/python', 'cpu_count': 128, 'cpu_count_logical': 10, 'cpu_freq': {'current': 2634.686363281249, 'min': 1500.0, 'max': 2000.0}, 'cpu_freq_per_core': [{'current': 1599.544, 'min': 1500.0, 'max': 2000.0}, {'current': 1590.673, 'min': 1500.0, 'max': 2000.0}, {'current': 1595.493, 'min': 1500.0, 'max': 2000.0}, {'current': 2347.256, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.73, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.651, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.645, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.758, 'min': 1500.0, 'max': 2000.0}, {'current': 2973.285, 'min': 1500.0, 'max': 2000.0}, {'current': 2973.641, 'min': 1500.0, 'max': 2000.0}, {'current': 2973.11, 'min': 1500.0, 'max': 2000.0}, {'current': 2973.645, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.389, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.529, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.576, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.399, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.569, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.609, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.717, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.601, 'min': 1500.0, 'max': 2000.0}, {'current': 2973.758, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.371, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.551, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.497, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.381, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.496, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.505, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.725, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.385, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.35, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.37, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.501, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.812, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.921, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.99, 'min': 1500.0, 'max': 2000.0}, {'current': 2976.06, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.761, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.8, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.513, 'min': 1500.0, 'max': 2000.0}, {'current': 2974.858, 'min': 1500.0, 'max': 2000.0}, {'current': 2977.253, 'min': 1500.0, 'max': 2000.0}, {'current': 2977.122, 'min': 1500.0, 'max': 2000.0}, {'current': 2977.216, 'min': 1500.0, 'max': 2000.0}, {'current': 2977.351, 'min': 1500.0, 'max': 2000.0}, {'current': 2952.752, 'min': 1500.0, 'max': 2000.0}, {'current': 1734.099, 'min': 1500.0, 'max': 2000.0}, {'current': 2462.392, 'min': 1500.0, 'max': 2000.0}, {'current': 2323.944, 'min': 1500.0, 'max': 2000.0}, {'current': 2670.691, 'min': 1500.0, 'max': 2000.0}, {'current': 2952.297, 'min': 1500.0, 'max': 2000.0}, {'current': 2527.9, 'min': 1500.0, 'max': 2000.0}, {'current': 1614.72, 'min': 1500.0, 'max': 2000.0}, {'current': 2089.336, 'min': 1500.0, 'max': 2000.0}, {'current': 2272.665, 'min': 1500.0, 'max': 2000.0}, {'current': 1639.533, 'min': 1500.0, 'max': 2000.0}, {'current': 2536.867, 'min': 1500.0, 'max': 2000.0}, {'current': 1497.019, 'min': 1500.0, 'max': 2000.0}, {'current': 1632.809, 'min': 1500.0, 'max': 2000.0}, {'current': 1717.244, 'min': 1500.0, 'max': 2000.0}, {'current': 1669.054, 'min': 1500.0, 'max': 2000.0}, {'current': 1505.127, 'min': 1500.0, 'max': 2000.0}, {'current': 1826.761, 'min': 1500.0, 'max': 2000.0}, {'current': 2978.749, 'min': 1500.0, 'max': 2000.0}, {'current': 2978.713, 'min': 1500.0, 'max': 2000.0}, {'current': 2878.736, 'min': 1500.0, 'max': 2000.0}, {'current': 2878.721, 'min': 1500.0, 'max': 2000.0}, {'current': 2878.712, 'min': 1500.0, 'max': 2000.0}, {'current': 2878.581, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.947, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.836, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.711, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.786, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.185, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.083, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.085, 'min': 1500.0, 'max': 2000.0}, {'current': 2876.987, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.166, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.117, 'min': 1500.0, 'max': 2000.0}, {'current': 2877.084, 'min': 1500.0, 'max': 2000.0}, {'current': 2876.92, 'min': 1500.0, 'max': 2000.0}, {'current': 2876.077, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.864, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.759, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.823, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.397, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.316, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.254, 'min': 1500.0, 'max': 2000.0}, {'current': 2869.971, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.486, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.471, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.483, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.539, 'min': 1500.0, 'max': 2000.0}, {'current': 2874.982, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.045, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.015, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.12, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.534, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.524, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.54, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.546, 'min': 1500.0, 'max': 2000.0}, {'current': 2876.047, 'min': 1500.0, 'max': 2000.0}, {'current': 2876.141, 'min': 1500.0, 'max': 2000.0}, {'current': 2876.312, 'min': 1500.0, 'max': 2000.0}, {'current': 2876.267, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.166, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.169, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.16, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.207, 'min': 1500.0, 'max': 2000.0}, {'current': 2799.274, 'min': 1500.0, 'max': 2000.0}, {'current': 2875.665, 'min': 1500.0, 'max': 2000.0}, {'current': 1443.212, 'min': 1500.0, 'max': 2000.0}, {'current': 1438.99, 'min': 1500.0, 'max': 2000.0}, {'current': 1497.851, 'min': 1500.0, 'max': 2000.0}, {'current': 1497.439, 'min': 1500.0, 'max': 2000.0}, {'current': 1800.113, 'min': 1500.0, 'max': 2000.0}, {'current': 1716.422, 'min': 1500.0, 'max': 2000.0}, {'current': 1747.731, 'min': 1500.0, 'max': 2000.0}, {'current': 1820.152, 'min': 1500.0, 'max': 2000.0}, {'current': 2037.618, 'min': 1500.0, 'max': 2000.0}, {'current': 1466.669, 'min': 1500.0, 'max': 2000.0}, {'current': 1498.642, 'min': 1500.0, 'max': 2000.0}, {'current': 1497.55, 'min': 1500.0, 'max': 2000.0}, {'current': 1496.797, 'min': 1500.0, 'max': 2000.0}, {'current': 1498.477, 'min': 1500.0, 'max': 2000.0}, {'current': 1452.946, 'min': 1500.0, 'max': 2000.0}, {'current': 2897.572, 'min': 1500.0, 'max': 2000.0}, {'current': 1479.286, 'min': 1500.0, 'max': 2000.0}, {'current': 1800.563, 'min': 1500.0, 'max': 2000.0}, {'current': 1707.307, 'min': 1500.0, 'max': 2000.0}, {'current': 3041.222, 'min': 1500.0, 'max': 2000.0}, {'current': 1749.749, 'min': 1500.0, 'max': 2000.0}, {'current': 1738.781, 'min': 1500.0, 'max': 2000.0}, {'current': 3044.933, 'min': 1500.0, 'max': 2000.0}, {'current': 2987.29, 'min': 1500.0, 'max': 2000.0}, {'current': 3024.889, 'min': 1500.0, 'max': 2000.0}, {'current': 3038.546, 'min': 1500.0, 'max': 2000.0}, {'current': 3049.304, 'min': 1500.0, 'max': 2000.0}, {'current': 2997.563, 'min': 1500.0, 'max': 2000.0}, {'current': 3021.732, 'min': 1500.0, 'max': 2000.0}, {'current': 2986.954, 'min': 1500.0, 'max': 2000.0}, {'current': 3021.7, 'min': 1500.0, 'max': 2000.0}, {'current': 3037.431, 'min': 1500.0, 'max': 2000.0}, {'current': 3049.994, 'min': 1500.0, 'max': 2000.0}, {'current': 3052.694, 'min': 1500.0, 'max': 2000.0}, {'current': 3050.105, 'min': 1500.0, 'max': 2000.0}, {'current': 3050.261, 'min': 1500.0, 'max': 2000.0}, {'current': 2991.722, 'min': 1500.0, 'max': 2000.0}, {'current': 3056.367, 'min': 1500.0, 'max': 2000.0}, {'current': 3037.434, 'min': 1500.0, 'max': 2000.0}, {'current': 3075.11, 'min': 1500.0, 'max': 2000.0}, {'current': 3059.082, 'min': 1500.0, 'max': 2000.0}, {'current': 3050.33, 'min': 1500.0, 'max': 2000.0}, {'current': 3051.644, 'min': 1500.0, 'max': 2000.0}, {'current': 3065.637, 'min': 1500.0, 'max': 2000.0}, {'current': 3072.988, 'min': 1500.0, 'max': 2000.0}, {'current': 3057.88, 'min': 1500.0, 'max': 2000.0}, {'current': 3064.347, 'min': 1500.0, 'max': 2000.0}, {'current': 3076.699, 'min': 1500.0, 'max': 2000.0}, {'current': 3073.713, 'min': 1500.0, 'max': 2000.0}, {'current': 3079.095, 'min': 1500.0, 'max': 2000.0}, {'current': 3074.24, 'min': 1500.0, 'max': 2000.0}, {'current': 3075.08, 'min': 1500.0, 'max': 2000.0}, {'current': 3074.784, 'min': 1500.0, 'max': 2000.0}, {'current': 3079.006, 'min': 1500.0, 'max': 2000.0}, {'current': 3077.039, 'min': 1500.0, 'max': 2000.0}, {'current': 3075.145, 'min': 1500.0, 'max': 2000.0}, {'current': 3085.531, 'min': 1500.0, 'max': 2000.0}, {'current': 3096.129, 'min': 1500.0, 'max': 2000.0}, {'current': 3078.309, 'min': 1500.0, 'max': 2000.0}, {'current': 3075.031, 'min': 1500.0, 'max': 2000.0}, {'current': 3072.608, 'min': 1500.0, 'max': 2000.0}, {'current': 3078.953, 'min': 1500.0, 'max': 2000.0}, {'current': 1497.014, 'min': 1500.0, 'max': 2000.0}, {'current': 1492.636, 'min': 1500.0, 'max': 2000.0}, {'current': 1499.831, 'min': 1500.0, 'max': 2000.0}, {'current': 1484.644, 'min': 1500.0, 'max': 2000.0}, {'current': 1497.402, 'min': 1500.0, 'max': 2000.0}, {'current': 1493.943, 'min': 1500.0, 'max': 2000.0}, {'current': 1504.17, 'min': 1500.0, 'max': 2000.0}, {'current': 1469.394, 'min': 1500.0, 'max': 2000.0}, {'current': 2475.639, 'min': 1500.0, 'max': 2000.0}, {'current': 1786.149, 'min': 1500.0, 'max': 2000.0}, {'current': 2154.201, 'min': 1500.0, 'max': 2000.0}, {'current': 3106.291, 'min': 1500.0, 'max': 2000.0}, {'current': 1673.844, 'min': 1500.0, 'max': 2000.0}, {'current': 1595.41, 'min': 1500.0, 'max': 2000.0}, {'current': 1799.78, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.087, 'min': 1500.0, 'max': 2000.0}, {'current': 1365.864, 'min': 1500.0, 'max': 2000.0}, {'current': 1365.121, 'min': 1500.0, 'max': 2000.0}, {'current': 3058.657, 'min': 1500.0, 'max': 2000.0}, {'current': 3056.246, 'min': 1500.0, 'max': 2000.0}, {'current': 3057.479, 'min': 1500.0, 'max': 2000.0}, {'current': 3075.102, 'min': 1500.0, 'max': 2000.0}, {'current': 3075.212, 'min': 1500.0, 'max': 2000.0}, {'current': 3066.812, 'min': 1500.0, 'max': 2000.0}, {'current': 3049.66, 'min': 1500.0, 'max': 2000.0}, {'current': 3046.611, 'min': 1500.0, 'max': 2000.0}, {'current': 3007.405, 'min': 1500.0, 'max': 2000.0}, {'current': 2946.027, 'min': 1500.0, 'max': 2000.0}, {'current': 2900.197, 'min': 1500.0, 'max': 2000.0}, {'current': 2940.776, 'min': 1500.0, 'max': 2000.0}, {'current': 2988.261, 'min': 1500.0, 'max': 2000.0}, {'current': 2994.158, 'min': 1500.0, 'max': 2000.0}, {'current': 2967.495, 'min': 1500.0, 'max': 2000.0}, {'current': 2949.085, 'min': 1500.0, 'max': 2000.0}, {'current': 2960.026, 'min': 1500.0, 'max': 2000.0}, {'current': 2977.552, 'min': 1500.0, 'max': 2000.0}, {'current': 2926.404, 'min': 1500.0, 'max': 2000.0}, {'current': 2947.513, 'min': 1500.0, 'max': 2000.0}, {'current': 2958.34, 'min': 1500.0, 'max': 2000.0}, {'current': 2923.295, 'min': 1500.0, 'max': 2000.0}, {'current': 2946.636, 'min': 1500.0, 'max': 2000.0}, {'current': 2951.884, 'min': 1500.0, 'max': 2000.0}, {'current': 2922.143, 'min': 1500.0, 'max': 2000.0}, {'current': 2925.228, 'min': 1500.0, 'max': 2000.0}, {'current': 2934.602, 'min': 1500.0, 'max': 2000.0}, {'current': 2928.799, 'min': 1500.0, 'max': 2000.0}, {'current': 2870.633, 'min': 1500.0, 'max': 2000.0}, {'current': 2891.517, 'min': 1500.0, 'max': 2000.0}, {'current': 2922.497, 'min': 1500.0, 'max': 2000.0}, {'current': 2926.109, 'min': 1500.0, 'max': 2000.0}, {'current': 2915.779, 'min': 1500.0, 'max': 2000.0}, {'current': 2936.508, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.334, 'min': 1500.0, 'max': 2000.0}, {'current': 2963.145, 'min': 1500.0, 'max': 2000.0}, {'current': 2963.176, 'min': 1500.0, 'max': 2000.0}, {'current': 2975.504, 'min': 1500.0, 'max': 2000.0}, {'current': 2977.448, 'min': 1500.0, 'max': 2000.0}, {'current': 2972.708, 'min': 1500.0, 'max': 2000.0}, {'current': 2962.767, 'min': 1500.0, 'max': 2000.0}, {'current': 2963.547, 'min': 1500.0, 'max': 2000.0}, {'current': 2963.881, 'min': 1500.0, 'max': 2000.0}, {'current': 2993.221, 'min': 1500.0, 'max': 2000.0}, {'current': 3000.848, 'min': 1500.0, 'max': 2000.0}, {'current': 2208.278, 'min': 1500.0, 'max': 2000.0}, {'current': 2951.433, 'min': 1500.0, 'max': 2000.0}, {'current': 3007.066, 'min': 1500.0, 'max': 2000.0}, {'current': 1384.943, 'min': 1500.0, 'max': 2000.0}, {'current': 1494.621, 'min': 1500.0, 'max': 2000.0}, {'current': 1499.991, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.06, 'min': 1500.0, 'max': 2000.0}, {'current': 1799.586, 'min': 1500.0, 'max': 2000.0}, {'current': 1499.94, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.04, 'min': 1500.0, 'max': 2000.0}, {'current': 1499.374, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.082, 'min': 1500.0, 'max': 2000.0}, {'current': 1485.904, 'min': 1500.0, 'max': 2000.0}, {'current': 1496.969, 'min': 1500.0, 'max': 2000.0}, {'current': 1500.092, 'min': 1500.0, 'max': 2000.0}, {'current': 1499.464, 'min': 1500.0, 'max': 2000.0}, {'current': 1499.105, 'min': 1500.0, 'max': 2000.0}, {'current': 1497.638, 'min': 1500.0, 'max': 2000.0}, {'current': 1491.443, 'min': 1500.0, 'max': 2000.0}, {'current': 1802.272, 'min': 1500.0, 'max': 2000.0}, {'current': 1498.234, 'min': 1500.0, 'max': 2000.0}], 'disk': {'/': {'total': 98.18512344360352, 'used': 41.86075973510742}}, 'gpu': 'NVIDIA A100-SXM4-40GB', 'gpu_count': 1, 'gpu_devices': [{'name': 'NVIDIA A100-SXM4-40GB', 'memory_total': 42949672960}], 'memory': {'total': 275.375}}
+2024-08-14 18:52:04,452 INFO    HandlerThread:932612 [system_monitor.py:probe():224] Finished collecting system info
+2024-08-14 18:52:04,452 INFO    HandlerThread:932612 [system_monitor.py:probe():227] Publishing system info
+2024-08-14 18:52:04,452 DEBUG   HandlerThread:932612 [system_info.py:_save_conda():209] Saving list of conda packages installed into the current environment
+2024-08-14 18:52:05,227 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_created():271] file/dir created: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/conda-environment.yaml
+2024-08-14 18:52:16,301 DEBUG   HandlerThread:932612 [system_info.py:_save_conda():224] Saving conda packages done
+2024-08-14 18:52:16,342 INFO    HandlerThread:932612 [system_monitor.py:probe():229] Finished publishing system info
+2024-08-14 18:52:16,349 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/conda-environment.yaml
+2024-08-14 18:52:16,350 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_created():271] file/dir created: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/wandb-metadata.json
+2024-08-14 18:52:16,440 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:16,440 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: keepalive
+2024-08-14 18:52:16,440 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:16,440 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: keepalive
+2024-08-14 18:52:16,441 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:16,441 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: keepalive
+2024-08-14 18:52:16,441 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:16,441 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: keepalive
+2024-08-14 18:52:16,441 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:16,441 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: keepalive
+2024-08-14 18:52:16,448 DEBUG   SenderThread:932612 [sender.py:send():391] send: files
+2024-08-14 18:52:16,449 INFO    SenderThread:932612 [sender.py:_save_file():1466] saving file wandb-metadata.json with policy now
+2024-08-14 18:52:17,067 INFO    wandb-upload_0:932612 [upload_job.py:push():130] Uploaded file /tmp/tmpagr6888zwandb/l4s1hxvo-wandb-metadata.json
+2024-08-14 18:52:17,814 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: python_packages
+2024-08-14 18:52:17,817 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: python_packages
+2024-08-14 18:52:17,817 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: stop_status
+2024-08-14 18:52:17,818 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:17,831 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: stop_status
+2024-08-14 18:52:18,048 DEBUG   SenderThread:932612 [sender.py:send():391] send: telemetry
+2024-08-14 18:52:18,373 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_created():271] file/dir created: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:18,374 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_created():271] file/dir created: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/requirements.txt
+2024-08-14 18:52:18,855 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:19,838 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:20,391 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:20,732 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:20,836 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:21,400 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/config.yaml
+2024-08-14 18:52:21,827 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:22,405 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:22,826 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:23,871 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:24,444 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:24,844 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:25,850 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:26,828 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:26,834 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:27,836 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:29,009 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:29,760 DEBUG   SenderThread:932612 [sender.py:send():391] send: config
+2024-08-14 18:52:29,884 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:30,483 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:30,884 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:31,904 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:32,503 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:32,772 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:32,819 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: stop_status
+2024-08-14 18:52:32,821 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: stop_status
+2024-08-14 18:52:32,884 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:33,912 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:34,893 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:35,892 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:36,904 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:37,842 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:37,885 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:38,893 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:39,896 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:40,562 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:40,885 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:41,892 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:42,617 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:42,886 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:43,858 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:43,890 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:44,897 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:45,895 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:46,119 DEBUG   SenderThread:932612 [sender.py:send():391] send: exit
+2024-08-14 18:52:46,120 INFO    SenderThread:932612 [sender.py:send_exit():598] handling exit code: 1
+2024-08-14 18:52:46,120 INFO    SenderThread:932612 [sender.py:send_exit():600] handling runtime: 55
+2024-08-14 18:52:46,150 INFO    SenderThread:932612 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-08-14 18:52:46,152 INFO    SenderThread:932612 [sender.py:send_exit():606] send defer
+2024-08-14 18:52:46,153 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:46,153 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 0
+2024-08-14 18:52:46,153 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:46,154 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 0
+2024-08-14 18:52:46,154 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 1
+2024-08-14 18:52:46,154 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:46,154 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 1
+2024-08-14 18:52:46,154 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:46,155 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 1
+2024-08-14 18:52:46,155 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 2
+2024-08-14 18:52:46,155 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:46,155 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 2
+2024-08-14 18:52:46,155 INFO    HandlerThread:932612 [system_monitor.py:finish():203] Stopping system monitor
+2024-08-14 18:52:46,160 INFO    HandlerThread:932612 [interfaces.py:finish():200] Joined cpu monitor
+2024-08-14 18:52:46,162 INFO    HandlerThread:932612 [interfaces.py:finish():200] Joined disk monitor
+2024-08-14 18:52:46,162 DEBUG   SystemMonitor:932612 [system_monitor.py:_start():172] Starting system metrics aggregation loop
+2024-08-14 18:52:46,166 DEBUG   SystemMonitor:932612 [system_monitor.py:_start():179] Finished system metrics aggregation loop
+2024-08-14 18:52:46,166 DEBUG   SystemMonitor:932612 [system_monitor.py:_start():183] Publishing last batch of metrics
+2024-08-14 18:52:46,656 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:46,657 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_created():271] file/dir created: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/wandb-summary.json
+2024-08-14 18:52:46,667 INFO    HandlerThread:932612 [interfaces.py:finish():200] Joined gpu monitor
+2024-08-14 18:52:46,667 INFO    HandlerThread:932612 [interfaces.py:finish():200] Joined memory monitor
+2024-08-14 18:52:46,667 INFO    HandlerThread:932612 [interfaces.py:finish():200] Joined network monitor
+2024-08-14 18:52:46,671 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:46,671 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 2
+2024-08-14 18:52:46,671 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 3
+2024-08-14 18:52:46,672 DEBUG   SenderThread:932612 [sender.py:send():391] send: stats
+2024-08-14 18:52:46,672 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:46,672 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 3
+2024-08-14 18:52:46,674 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:46,674 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 3
+2024-08-14 18:52:46,674 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 4
+2024-08-14 18:52:46,674 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:46,674 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 4
+2024-08-14 18:52:46,684 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:46,685 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 4
+2024-08-14 18:52:46,685 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 5
+2024-08-14 18:52:46,686 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:46,686 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 5
+2024-08-14 18:52:46,688 DEBUG   SenderThread:932612 [sender.py:send():391] send: summary
+2024-08-14 18:52:46,694 INFO    SenderThread:932612 [sender.py:_save_file():1466] saving file wandb-summary.json with policy end
+2024-08-14 18:52:46,695 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:46,695 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 5
+2024-08-14 18:52:46,695 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 6
+2024-08-14 18:52:46,695 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:46,695 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 6
+2024-08-14 18:52:46,696 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:46,696 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 6
+2024-08-14 18:52:46,701 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: status_report
+2024-08-14 18:52:46,863 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 7
+2024-08-14 18:52:46,863 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:46,863 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 7
+2024-08-14 18:52:46,864 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:46,864 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 7
+2024-08-14 18:52:47,118 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: poll_exit
+2024-08-14 18:52:47,660 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/config.yaml
+2024-08-14 18:52:49,901 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 8
+2024-08-14 18:52:49,925 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:49,925 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: poll_exit
+2024-08-14 18:52:49,925 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 8
+2024-08-14 18:52:49,935 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:49,935 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 8
+2024-08-14 18:52:49,935 INFO    SenderThread:932612 [job_builder.py:build():440] Attempting to build job artifact
+2024-08-14 18:52:49,959 INFO    SenderThread:932612 [job_builder.py:_get_source_type():569] is repo sourced job
+2024-08-14 18:52:50,119 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: poll_exit
+2024-08-14 18:52:50,168 INFO    SenderThread:932612 [job_builder.py:build():545] adding wandb-job metadata file
+2024-08-14 18:52:50,198 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 9
+2024-08-14 18:52:50,198 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: poll_exit
+2024-08-14 18:52:50,199 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:50,199 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 9
+2024-08-14 18:52:50,208 DEBUG   SenderThread:932612 [sender.py:send():391] send: artifact
+2024-08-14 18:52:50,730 INFO    Thread-12 :932612 [dir_watcher.py:_on_file_modified():288] file/dir modified: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:50,987 INFO    SenderThread:932612 [sender.py:send_artifact():1549] sent artifact job-https___github.com_ValerianFourel_Guidance.git_train_text_to_image.py - {'id': 'QXJ0aWZhY3Q6MTE0OTk5ODAwMQ==', 'state': 'COMMITTED', 'artifactSequence': {'id': 'QXJ0aWZhY3RDb2xsZWN0aW9uOjQxNDEwODcyNA==', 'latestArtifact': {'id': 'QXJ0aWZhY3Q6MTE0OTk5ODAwMQ==', 'versionIndex': 1}}}
+2024-08-14 18:52:50,988 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:50,988 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 9
+2024-08-14 18:52:50,988 INFO    SenderThread:932612 [dir_watcher.py:finish():358] shutting down directory watcher
+2024-08-14 18:52:51,122 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: poll_exit
+2024-08-14 18:52:51,747 INFO    SenderThread:932612 [dir_watcher.py:finish():388] scan: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files
+2024-08-14 18:52:51,762 INFO    SenderThread:932612 [dir_watcher.py:finish():402] scan save: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/requirements.txt requirements.txt
+2024-08-14 18:52:51,763 INFO    SenderThread:932612 [dir_watcher.py:finish():402] scan save: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/conda-environment.yaml conda-environment.yaml
+2024-08-14 18:52:51,770 INFO    SenderThread:932612 [dir_watcher.py:finish():402] scan save: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/wandb-metadata.json wandb-metadata.json
+2024-08-14 18:52:51,776 INFO    SenderThread:932612 [dir_watcher.py:finish():402] scan save: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log output.log
+2024-08-14 18:52:51,801 INFO    SenderThread:932612 [dir_watcher.py:finish():402] scan save: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/config.yaml config.yaml
+2024-08-14 18:52:51,807 INFO    SenderThread:932612 [dir_watcher.py:finish():402] scan save: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/wandb-summary.json wandb-summary.json
+2024-08-14 18:52:51,818 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 10
+2024-08-14 18:52:51,826 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: poll_exit
+2024-08-14 18:52:51,829 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:51,833 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 10
+2024-08-14 18:52:51,834 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:51,834 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 10
+2024-08-14 18:52:51,834 INFO    SenderThread:932612 [file_pusher.py:finish():169] shutting down file pusher
+2024-08-14 18:52:52,126 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: poll_exit
+2024-08-14 18:52:52,129 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: poll_exit
+2024-08-14 18:52:52,222 INFO    wandb-upload_0:932612 [upload_job.py:push():130] Uploaded file /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/requirements.txt
+2024-08-14 18:52:52,342 INFO    wandb-upload_2:932612 [upload_job.py:push():130] Uploaded file /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/output.log
+2024-08-14 18:52:52,346 INFO    wandb-upload_1:932612 [upload_job.py:push():130] Uploaded file /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/conda-environment.yaml
+2024-08-14 18:52:52,348 INFO    wandb-upload_4:932612 [upload_job.py:push():130] Uploaded file /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/wandb-summary.json
+2024-08-14 18:52:52,366 INFO    wandb-upload_3:932612 [upload_job.py:push():130] Uploaded file /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/files/config.yaml
+2024-08-14 18:52:52,567 INFO    Thread-11 (_thread_body):932612 [sender.py:transition_state():626] send defer: 11
+2024-08-14 18:52:52,567 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:52,568 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 11
+2024-08-14 18:52:52,568 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:52,568 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 11
+2024-08-14 18:52:52,569 INFO    SenderThread:932612 [file_pusher.py:join():175] waiting for file pusher
+2024-08-14 18:52:52,569 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 12
+2024-08-14 18:52:52,569 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:52,569 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 12
+2024-08-14 18:52:52,570 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:52,570 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 12
+2024-08-14 18:52:52,570 INFO    SenderThread:932612 [file_stream.py:finish():601] file stream finish called
+2024-08-14 18:52:52,708 INFO    SenderThread:932612 [file_stream.py:finish():605] file stream finish is done
+2024-08-14 18:52:52,713 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 13
+2024-08-14 18:52:52,716 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:52,716 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 13
+2024-08-14 18:52:52,718 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:52,718 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 13
+2024-08-14 18:52:52,718 INFO    SenderThread:932612 [sender.py:transition_state():626] send defer: 14
+2024-08-14 18:52:52,724 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: defer
+2024-08-14 18:52:52,724 DEBUG   SenderThread:932612 [sender.py:send():391] send: final
+2024-08-14 18:52:52,724 INFO    HandlerThread:932612 [handler.py:handle_request_defer():184] handle defer: 14
+2024-08-14 18:52:52,724 DEBUG   SenderThread:932612 [sender.py:send():391] send: footer
+2024-08-14 18:52:52,724 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: defer
+2024-08-14 18:52:52,724 INFO    SenderThread:932612 [sender.py:send_request_defer():622] handle sender defer: 14
+2024-08-14 18:52:52,725 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: poll_exit
+2024-08-14 18:52:52,726 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: poll_exit
+2024-08-14 18:52:52,727 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: server_info
+2024-08-14 18:52:52,728 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: poll_exit
+2024-08-14 18:52:52,728 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: get_summary
+2024-08-14 18:52:52,729 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: sampled_history
+2024-08-14 18:52:52,729 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: server_info
+2024-08-14 18:52:52,729 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: internal_messages
+2024-08-14 18:52:52,880 DEBUG   SenderThread:932612 [sender.py:send_request():418] send_request: poll_exit
+2024-08-14 18:52:52,881 INFO    MainThread:932612 [wandb_run.py:_footer_history_summary_info():4035] rendering history
+2024-08-14 18:52:52,881 INFO    MainThread:932612 [wandb_run.py:_footer_history_summary_info():4067] rendering summary
+2024-08-14 18:52:52,881 INFO    MainThread:932612 [wandb_run.py:_footer_sync_info():3994] logging synced files
+2024-08-14 18:52:52,886 DEBUG   HandlerThread:932612 [handler.py:handle_request():158] handle_request: shutdown
+2024-08-14 18:52:52,886 INFO    HandlerThread:932612 [handler.py:finish():882] shutting down handler
+2024-08-14 18:52:53,729 INFO    WriterThread:932612 [datastore.py:close():296] close: /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_185149-m6cvo2ej/run-m6cvo2ej.wandb
+2024-08-14 18:52:53,880 INFO    SenderThread:932612 [sender.py:finish():1631] shutting down sender
+2024-08-14 18:52:53,880 INFO    SenderThread:932612 [file_pusher.py:finish():169] shutting down file pusher
+2024-08-14 18:52:53,881 INFO    SenderThread:932612 [file_pusher.py:join():175] waiting for file pusher

@@ -1,0 +1,34 @@
+08/15/2024 11:13:13 - INFO - __main__ - Distributed environment: NO
+Num processes: 1
+Process index: 0
+Local process index: 0
+Device: cuda
+Mixed precision type: no
+{'variance_type', 'dynamic_thresholding_ratio', 'thresholding', 'sample_max_value', 'rescale_betas_zero_snr', 'clip_sample_range'} was not found in config. Values will be initialized to default values.
+An error occurred while trying to fetch SG161222/Realistic_Vision_V6.0_B1_noVAE: SG161222/Realistic_Vision_V6.0_B1_noVAE does not appear to have a file named diffusion_pytorch_model.safetensors.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+{'shift_factor', 'latents_std', 'latents_mean', 'use_quant_conv', 'use_post_quant_conv', 'mid_block_add_attention'} was not found in config. Values will be initialized to default values.
+Traceback (most recent call last):
+  File "/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py", line 980, in <module>
+    main(config)
+  File "/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py", line 370, in main
+    args.base_model_path,
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/omegaconf/dictconfig.py", line 355, in __getattr__
+    self._format_and_raise(
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/omegaconf/base.py", line 231, in _format_and_raise
+    format_and_raise(
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/omegaconf/_utils.py", line 900, in format_and_raise
+    _raise(ex, cause)
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/omegaconf/_utils.py", line 798, in _raise
+    raise ex.with_traceback(sys.exc_info()[2])  # set env var OC_CAUSE=1 for full trace
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/omegaconf/dictconfig.py", line 351, in __getattr__
+    return self._get_impl(
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/omegaconf/dictconfig.py", line 442, in _get_impl
+    node = self._get_child(
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/omegaconf/basecontainer.py", line 73, in _get_child
+    child = self._get_node(
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/omegaconf/dictconfig.py", line 480, in _get_node
+    raise ConfigKeyError(f"Missing key {key!s}")
+omegaconf.errors.ConfigAttributeError: Missing key base_model_path
+    full_key: base_model_path
+    object_type=dict

@@ -1,0 +1,28 @@
+2024-08-14 18:37:01,602 INFO    MainThread:928154 [wandb_setup.py:_flush():76] Current SDK version is 0.17.6
+2024-08-14 18:37:01,603 INFO    MainThread:928154 [wandb_setup.py:_flush():76] Configure stats pid to 928154
+2024-08-14 18:37:01,603 INFO    MainThread:928154 [wandb_setup.py:_flush():76] Loading settings from /home/vfourel/.config/wandb/settings
+2024-08-14 18:37:01,603 INFO    MainThread:928154 [wandb_setup.py:_flush():76] Loading settings from /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/settings
+2024-08-14 18:37:01,603 INFO    MainThread:928154 [wandb_setup.py:_flush():76] Loading settings from environment variables: {}
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_setup.py:_flush():76] Applying setup settings: {'_disable_service': False}
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_setup.py:_flush():76] Inferring run settings from compute environment: {'program_relpath': 'train_text_to_image.py', 'program_abspath': '/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py', 'program': '/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py'}
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_setup.py:_flush():76] Applying login settings: {}
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_init.py:_log_setup():521] Logging user logs to /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_183701-whgov7uw/logs/debug.log
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_init.py:_log_setup():522] Logging internal logs to /lustre/home/vfourel/FaceGPT/Champ/Guidance/wandb/run-20240814_183701-whgov7uw/logs/debug-internal.log
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_init.py:init():559] calling init triggers
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_init.py:init():566] wandb.init called with sweep_config: {}
+config: {}
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_init.py:init():609] starting backend
+2024-08-14 18:37:01,604 INFO    MainThread:928154 [wandb_init.py:init():613] setting up manager
+2024-08-14 18:37:01,624 INFO    MainThread:928154 [backend.py:_multiprocessing_setup():105] multiprocessing start_methods=fork,spawn,forkserver, using: spawn
+2024-08-14 18:37:01,631 INFO    MainThread:928154 [wandb_init.py:init():621] backend started and connected
+2024-08-14 18:37:01,638 INFO    MainThread:928154 [wandb_init.py:init():716] updated telemetry
+2024-08-14 18:37:01,678 INFO    MainThread:928154 [wandb_init.py:init():749] communicating run to backend with 90.0 second timeout
+2024-08-14 18:37:02,110 INFO    MainThread:928154 [wandb_run.py:_on_init():2438] communicating current version
+2024-08-14 18:37:02,302 INFO    MainThread:928154 [wandb_run.py:_on_init():2447] got version response 
+2024-08-14 18:37:02,303 INFO    MainThread:928154 [wandb_init.py:init():800] starting run threads in backend
+2024-08-14 18:37:29,350 INFO    MainThread:928154 [wandb_run.py:_console_start():2416] atexit reg
+2024-08-14 18:37:29,351 INFO    MainThread:928154 [wandb_run.py:_redirect():2258] redirect: wrap_raw
+2024-08-14 18:37:29,351 INFO    MainThread:928154 [wandb_run.py:_redirect():2323] Wrapping output streams.
+2024-08-14 18:37:29,351 INFO    MainThread:928154 [wandb_run.py:_redirect():2348] Redirects installed.
+2024-08-14 18:37:29,364 INFO    MainThread:928154 [wandb_init.py:init():843] run started, returning control to user process
+2024-08-14 18:37:46,707 WARNING MsgRouterThr:928154 [router.py:message_loop():77] message_loop has been closed

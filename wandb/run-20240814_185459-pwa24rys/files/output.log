@@ -1,0 +1,55 @@
+08/14/2024 18:55:26 - INFO - __main__ - Distributed environment: NO
+Num processes: 1
+Process index: 0
+Local process index: 0
+Device: cuda
+Mixed precision type: no
+{'dynamic_thresholding_ratio', 'sample_max_value', 'rescale_betas_zero_snr', 'clip_sample_range', 'variance_type', 'thresholding'} was not found in config. Values will be initialized to default values.
+An error occurred while trying to fetch SG161222/Realistic_Vision_V6.0_B1_noVAE: SG161222/Realistic_Vision_V6.0_B1_noVAE does not appear to have a file named diffusion_pytorch_model.safetensors.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+{'use_post_quant_conv', 'latents_mean', 'latents_std', 'mid_block_add_attention', 'shift_factor', 'use_quant_conv'} was not found in config. Values will be initialized to default values.
+An error occurred while trying to fetch SG161222/Realistic_Vision_V6.0_B1_noVAE: SG161222/Realistic_Vision_V6.0_B1_noVAE does not appear to have a file named diffusion_pytorch_model.safetensors.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+08/14/2024 18:55:38 - INFO - __main__ - ***** Running training *****
+08/14/2024 18:55:38 - INFO - __main__ -   Num examples = 41483
+08/14/2024 18:55:38 - INFO - __main__ -   Num Epochs = 1000
+08/14/2024 18:55:38 - INFO - __main__ -   Instantaneous batch size per device = 4
+08/14/2024 18:55:38 - INFO - __main__ -   Total train batch size (w. parallel, distributed & accumulation) = 16
+08/14/2024 18:55:38 - INFO - __main__ -   Gradient Accumulation steps = 4
+08/14/2024 18:55:38 - INFO - __main__ -   Total optimization steps = 2593000
+Steps:   0%|                                                                                                                                                                                                                                | 0/2593000 [00:00<?, ?it/s]
+
+
+
+
+
+
+
+Steps:   0%|                                                                                                                                                                                         | 5/2593000 [00:23<2916:27:46,  4.05s/it, lr=5e-7, step_loss=0.194]08/14/2024 18:56:01 - INFO - accelerate.accelerator - Saving current state to /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-5
+Configuration saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-5/unet/config.json
+Model weights saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-5/unet/diffusion_pytorch_model.safetensors
+08/14/2024 18:56:29 - INFO - accelerate.checkpointing - Optimizer state saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-5/optimizer.bin
+08/14/2024 18:56:29 - INFO - accelerate.checkpointing - Scheduler state saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-5/scheduler.bin
+08/14/2024 18:56:29 - INFO - accelerate.checkpointing - Random states saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-5/random_states_0.pkl
+08/14/2024 18:56:29 - INFO - __main__ - Saved state to /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-5
+
+
+
+
+
+
+Steps:   0%|                                                                                                                                                                                        | 10/2593000 [01:03<3465:32:35,  4.81s/it, lr=5e-7, step_loss=0.154]08/14/2024 18:56:42 - INFO - accelerate.accelerator - Saving current state to /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-10
+Configuration saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-10/unet/config.json
+Model weights saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-10/unet/diffusion_pytorch_model.safetensors
+08/14/2024 18:57:04 - INFO - accelerate.checkpointing - Optimizer state saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-10/optimizer.bin
+08/14/2024 18:57:05 - INFO - accelerate.checkpointing - Scheduler state saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-10/scheduler.bin
+08/14/2024 18:57:05 - INFO - accelerate.checkpointing - Random states saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-10/random_states_0.pkl
+08/14/2024 18:57:05 - INFO - __main__ - Saved state to /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-10
+
+
+
+
+
+
+Steps:   0%|                                                                                                                                                                                        | 15/2593000 [01:39<3249:15:39,  4.51s/it, lr=5e-7, step_loss=0.101]08/14/2024 18:57:17 - INFO - accelerate.accelerator - Saving current state to /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-15
+Configuration saved in /ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07/checkpoint-15/unet/config.json

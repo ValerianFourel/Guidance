@@ -1,0 +1,19 @@
+08/14/2024 18:37:29 - INFO - __main__ - Distributed environment: NO
+Num processes: 1
+Process index: 0
+Local process index: 0
+Device: cuda
+Mixed precision type: no
+{'clip_sample_range', 'dynamic_thresholding_ratio', 'thresholding', 'variance_type', 'rescale_betas_zero_snr', 'sample_max_value'} was not found in config. Values will be initialized to default values.
+An error occurred while trying to fetch SG161222/Realistic_Vision_V6.0_B1_noVAE: SG161222/Realistic_Vision_V6.0_B1_noVAE does not appear to have a file named diffusion_pytorch_model.safetensors.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+{'mid_block_add_attention', 'shift_factor', 'latents_std', 'use_post_quant_conv', 'use_quant_conv', 'latents_mean'} was not found in config. Values will be initialized to default values.
+An error occurred while trying to fetch SG161222/Realistic_Vision_V6.0_B1_noVAE: SG161222/Realistic_Vision_V6.0_B1_noVAE does not appear to have a file named diffusion_pytorch_model.safetensors.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+Traceback (most recent call last):
+  File "/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py", line 890, in <module>
+    main(config)
+  File "/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py", line 560, in main
+    tracker_config.pop("validation_prompts")
+KeyError: 'validation_prompts'
+{'_metadata': ContainerMetadata(ref_type=typing.Any, object_type=<class 'dict'>, optional=True, key=None, flags={}, flags_root=False, resolver_cache=defaultdict(<class 'dict'>, {}), key_type=typing.Any, element_type=typing.Any), '_parent': None, '_flags_cache': {'struct': None, 'readonly': None, 'convert': None, 'allow_objects': None}, '_content': {'input_perturbation': 0.1, 'pretrained_model_name_or_path': 'SG161222/Realistic_Vision_V6.0_B1_noVAE', 'revision': None, 'dataset_name': None, 'dataset_config_name': None, 'train_data_dir': None, 'image_column': 'image', 'caption_column': 'text', 'max_train_samples': None, 'validation_prompts': 'null', 'output_dir': '/ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07', 'cache_dir': None, 'seed': None, 'resolution': 512, 'center_crop': False, 'random_flip': False, 'train_batch_size': 4, 'num_train_epochs': 1000, 'max_train_steps': 2593000, 'gradient_accumulation_steps': 4, 'gradient_checkpointing': False, 'learning_rate': 5e-07, 'scale_lr': False, 'lr_scheduler': 'constant', 'lr_warmup_steps': 5, 'snr_gamma': 1.0, 'use_8bit_adam': False, 'allow_tf32': False, 'use_ema': False, 'non_ema_revision': None, 'dataloader_num_workers': 2, 'adam_beta1': 0.9, 'adam_beta2': 0.999, 'adam_weight_decay': 0.01, 'adam_epsilon': 1e-08, 'max_grad_norm': 1.0, 'push_to_hub': False, 'hub_token': None, 'prediction_type': None, 'hub_model_id': None, 'logging_dir': 'logs', 'mixed_precision': None, 'report_to': 'tensorboard', 'local_rank': -1, 'checkpointing_steps': 5, 'checkpoints_total_limit': None, 'resume_from_checkpoint': None, 'enable_xformers_memory_efficient_attention': False, 'noise_offset': 0, 'validation_epochs': 5, 'tracker_project_name': 'text2image-fine-tune', 'guidance_encoder_kwargs': {'guidance_embedding_channels': 320, 'guidance_input_channels': 3, 'block_out_channels': [16, 32, 96, 256]}}}

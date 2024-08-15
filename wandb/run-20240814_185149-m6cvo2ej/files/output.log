@@ -1,0 +1,32 @@
+08/14/2024 18:52:17 - INFO - __main__ - Distributed environment: NO
+Num processes: 1
+Process index: 0
+Local process index: 0
+Device: cuda
+Mixed precision type: no
+{'sample_max_value', 'rescale_betas_zero_snr', 'clip_sample_range', 'dynamic_thresholding_ratio', 'thresholding', 'variance_type'} was not found in config. Values will be initialized to default values.
+An error occurred while trying to fetch SG161222/Realistic_Vision_V6.0_B1_noVAE: SG161222/Realistic_Vision_V6.0_B1_noVAE does not appear to have a file named diffusion_pytorch_model.safetensors.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+{'use_quant_conv', 'shift_factor', 'latents_mean', 'use_post_quant_conv', 'latents_std', 'mid_block_add_attention'} was not found in config. Values will be initialized to default values.
+An error occurred while trying to fetch SG161222/Realistic_Vision_V6.0_B1_noVAE: SG161222/Realistic_Vision_V6.0_B1_noVAE does not appear to have a file named diffusion_pytorch_model.safetensors.
+Defaulting to unsafe serialization. Pass `allow_pickle=False` to raise an error instead.
+08/14/2024 18:52:29 - INFO - __main__ - ***** Running training *****
+08/14/2024 18:52:29 - INFO - __main__ -   Num examples = 41483
+08/14/2024 18:52:29 - INFO - __main__ -   Num Epochs = 1000
+08/14/2024 18:52:29 - INFO - __main__ -   Instantaneous batch size per device = 4
+08/14/2024 18:52:29 - INFO - __main__ -   Total train batch size (w. parallel, distributed & accumulation) = 16
+08/14/2024 18:52:29 - INFO - __main__ -   Gradient Accumulation steps = 4
+08/14/2024 18:52:29 - INFO - __main__ -   Total optimization steps = 2593000
+Steps:   0%|                                                                                                                                                                                                                                | 0/2593000 [00:00<?, ?it/s]
+
+
+Steps:   0%|                                                                                                                                                                                        | 1/2593000 [00:14<10653:22:37, 14.79s/it, lr=5e-7, step_loss=0.199]Traceback (most recent call last):
+  File "/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py", line 908, in <module>
+    main(config)
+  File "/lustre/home/vfourel/FaceGPT/Champ/Guidance/train_text_to_image.py", line 763, in main
+    accelerator.log({"train_loss": train_loss,"loss": loss, "learning_rate": lr_scheduler.get_last_lr()}, step=global_step)
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/accelerate/accelerator.py", line 602, in _inner
+    return PartialState().on_main_process(function)(*args, **kwargs)
+  File "/home/vfourel/miniconda3/envs/champv2/lib/python3.10/site-packages/accelerate/accelerator.py", line 2266, in log
+    for tracker in self.trackers:
+AttributeError: 'Accelerator' object has no attribute 'trackers'
