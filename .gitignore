@@ -9,3 +9,13 @@ models/__pycache__/motion_module.cpython-310.pyc
 models/__pycache__/resnet.cpython-310.pyc
 models/__pycache__/transformer_3d.cpython-310.pyc
 models/__pycache__/unet_2d_condition.cpython-310.pyc
+# Ignore the wandb folder and all its contents
+wandb/
+
+# Optionally, you might want to ignore wandb files in any subdirectory
+**/wandb/
+
+# If you want to ignore only specific files within wandb folders, you can use:
+# wandb/**/*.log
+# wandb/**/*.yaml
+# wandb/**/events.out.tfevents.*

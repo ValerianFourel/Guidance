@@ -61,7 +61,9 @@ from models.mutual_self_attention import ReferenceAttentionControl
 from models.champ_flame_model import ChampFlameModel
 from models.guidance_encoder import GuidanceEncoder
 from transformers import CLIPVisionModelWithProjection
-
+from datasets.image_dataset import ImageDataset
+import os
+os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 ###########################
 from diffusers.optimization import get_scheduler
 from diffusers.training_utils import EMAModel , compute_snr
@@ -92,9 +94,8 @@ import json
 # run = wandb.init(project="StableFace", entity="valerian-fourel")
 
 
-model_id = "SG161222/Realistic_Vision_V6.0_B1_noVAE"
 #annotation_file = '/home/vfourel/FaceGPT/Data/LLaVAAnnotations/StableDiffusionPrompts/prompt_response_conversation_All_data.json'
-
+model_id = "SG161222/RealVisXL_V4.0"
 annotation_file = '/home/vfourel/FaceGPT/Data/LLaVAAnnotations/StableDiffusionPrompts/PromptsSmall07_41ksamples.json'
 
 # Define your dataset class
@@ -372,15 +373,15 @@ def main(args):
     ).to(device="cuda")
 
 
-    image_enc = CLIPVisionModelWithProjection.from_pretrained(
-        args.image_encoder_path,
-    ).to(dtype=weight_dtype, device="cuda")    
+    # image_enc = CLIPVisionModelWithProjection.from_pretrained(
+    #     args.image_encoder_path,
+    # ).to(dtype=weight_dtype, device="cuda")    
     
     guidance_encoder_flame = setup_guidance_encoder(args)
     
     # Freeze some modules
     vae.requires_grad_(False)
-    image_enc.requires_grad_(False)
+    #image_enc.requires_grad_(False)
     for name, param in reference_unet.named_parameters():
         if "up_blocks.3" in name:
             param.requires_grad_(False)
@@ -550,15 +551,67 @@ def main(args):
     )
 
 
-    # DataLoaders creation:
-    train_dataset = CustomDataset(annotation_file=annotation_file, tokenizer=tokenizer, transform=train_transforms)
 
-    def collate_fn(examples):
-        pixel_values = torch.stack([example["image"] for example in examples])
-        pixel_values = pixel_values.to(memory_format=torch.contiguous_format).float()
-        input_ids = torch.stack([example["input_ids"] for example in examples])
-        return {"pixel_values": pixel_values, "input_ids": input_ids}
+
+
+    # DataLoaders creation:
+    # train_dataset = CustomDataset(annotation_file=annotation_file, tokenizer=tokenizer, transform=train_transforms)
+
+#######################################################
+#
+# Modifications by VF
+#
+    train_dataset = ImageDataset(
+        tokenizer = tokenizer,
+        text_encoder=text_encoder,
+        image_json_path=args.data.image_json_path,
+        image_size=args.data.image_size,
+        sample_margin=args.data.sample_margin,
+        data_parts=args.data.data_parts,
+        guids=args.data.guids,
+        extra_region=None,
+        bbox_crop=args.data.bbox_crop,
+        bbox_resize_ratio=tuple(args.data.bbox_resize_ratio),
+    )
+
+
+######################################################################
+#
+# VF: modify this function
+
+    # def collate_fn(examples):
+    #     pixel_values = torch.stack([example["image"] for example in examples])
+    #     pixel_values = pixel_values.to(memory_format=torch.contiguous_format).float()
+    #     input_ids = torch.stack([example["input_ids"] for example in examples])
+    #     return {"pixel_values": pixel_values, "input_ids": input_ids}
     
+    def collate_fn(examples):
+        # Assuming `tgt_img` contains the image data
+        pixel_values = torch.stack([example["tgt_img"] for example in examples])
+        pixel_values = pixel_values.to(memory_format=torch.contiguous_format).float()
+        
+        # Assuming `tgt_guid` contains tensor data
+        tgt_guids = torch.stack([example["tgt_guid"] for example in examples])
+        attention_masks = torch.stack([example["attention_mask"] for example in examples])
+        input_idss = torch.stack([example["input_ids"] for example in examples])
+        # print("DEVICE:    ",input_idss.device,attention_masks.device)
+        # with torch.no_grad():  # If you're not training the text encoder, use no_grad to save memory
+        #      text_embeddings = text_encoder(input_idss, attention_mask=attention_masks)[0]
+
+        # If `description` is a list of strings, you may need to tokenize them
+        # For this example, let's assume descriptions are already tokenized
+            # Extract and tokenize descriptions
+        # text_embeddings = [example["text_embeddings"] for example in examples]
+
+        return {
+            "pixel_values": pixel_values,
+            "tgt_guids": tgt_guids,
+            "attention_masks":attention_masks,
+            "input_idss":input_idss
+        }
+
+    ######################################################################
+
     train_dataloader = torch.utils.data.DataLoader(
         train_dataset,
         shuffle=True,
@@ -701,14 +754,18 @@ def main(args):
 
     for epoch in range(first_epoch, args.num_train_epochs):
         train_loss = 0.0
-                # Determine the total number of batches
+        # Determine the total number of batches
         total_batches = len(train_dataloader)
-    # We remove the last batch to keep a smooth training function
+        # We remove the last batch to keep a smooth training function
 
         for step, batch in enumerate(train_dataloader):
             if step == total_batches - 1:
                 break
+            with torch.no_grad():  # If you're not training the text encoder, use no_grad to save memory
+                  text_embeddings = text_encoder(batch["input_idss"])[0]
 
+
+            ###### figure out the training using guidance
             with accelerator.accumulate(unet):
                 # Convert images to latent space
                 latents = vae.encode(batch["pixel_values"].to(weight_dtype)).latent_dist.sample()
