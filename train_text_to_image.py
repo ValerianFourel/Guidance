@@ -593,7 +593,7 @@ def main(args):
         # Assuming `tgt_guid` contains tensor data
         tgt_guids = torch.stack([example["tgt_guid"] for example in examples])
         attention_masks = torch.stack([example["attention_mask"] for example in examples])
-        input_idss = torch.stack([example["input_ids"] for example in examples])
+        input_ids = torch.stack([example["input_ids"] for example in examples])
         # print("DEVICE:    ",input_idss.device,attention_masks.device)
         # with torch.no_grad():  # If you're not training the text encoder, use no_grad to save memory
         #      text_embeddings = text_encoder(input_idss, attention_mask=attention_masks)[0]
@@ -607,7 +607,7 @@ def main(args):
             "pixel_values": pixel_values,
             "tgt_guids": tgt_guids,
             "attention_masks":attention_masks,
-            "input_idss":input_idss
+            "input_ids":input_ids
         }
 
     ######################################################################
@@ -762,11 +762,11 @@ def main(args):
             if step == total_batches - 1:
                 break
             with torch.no_grad():  # If you're not training the text encoder, use no_grad to save memory
-                  text_embeddings = text_encoder(batch["input_idss"])[0]
+                  text_embeddings = text_encoder(batch["input_ids"])[0]
 
 
             ###### figure out the training using guidance
-            with accelerator.accumulate(unet):
+            with accelerator.accumulate(model):
                 # Convert images to latent space
                 latents = vae.encode(batch["pixel_values"].to(weight_dtype)).latent_dist.sample()
                 latents = latents * vae.config.scaling_factor
@@ -826,28 +826,13 @@ def main(args):
                 # Modified by VF
                 #
 
-                # print(noisy_latents, timesteps, encoder_hidden_states)
-                # print(unet(noisy_latents, timesteps, encoder_hidden_states,added_cond_kwargs=added_cond_kwargs,))
-                # Predict the noise residual and compute loss
-                model_pred = model(noisy_latents, timesteps, encoder_hidden_states,added_cond_kwargs = added_cond_kwargs).sample
 
-                # if args.snr_gamma is None:
-                #     loss = F.mse_loss(model_pred.float(), target.float(), reduction="mean")
-                # else:
+                # Predict the noise residual and compute loss
+                model_pred = model(noisy_latents, timesteps,encoder_hidden_states= encoder_hidden_states,multi_guidance_cond = batch["tgt_guids"])#.sample
+
                 #     # Compute loss-weights as per Section 3.4 of https://arxiv.org/abs/2303.09556.
                 #     # Since we predict the noise instead of x_0, the original formulation is slightly changed.
                 #     # This is discussed in Section 4.2 of the same paper.
-                #     snr = compute_snr(noise_scheduler, timesteps)
-                #     if noise_scheduler.config.prediction_type == "v_prediction":
-                #         # Velocity objective requires that we add one to SNR values before we divide by them.
-                #         snr = snr + 1
-                #     mse_loss_weights = (
-                #         torch.stack([snr, args.snr_gamma * torch.ones_like(timesteps)], dim=1).min(dim=1)[0] / snr
-                #     )
-
-                #     loss = F.mse_loss(model_pred.float(), target.float(), reduction="none")
-                #     loss = loss.mean(dim=list(range(1, len(loss.shape)))) * mse_loss_weights
-                #     loss = loss.mean()
 
                 if args.snr_gamma is None:
                     loss = F.l1_loss(model_pred.float(), target.float(), reduction="mean")
@@ -874,7 +859,7 @@ def main(args):
                 # loss.backward()
                 accelerator.backward(loss)
                 if accelerator.sync_gradients:
-                    accelerator.clip_grad_norm_(unet.parameters(), args.max_grad_norm)
+                    accelerator.clip_grad_norm_(reference_unet.parameters(), args.max_grad_norm)
                     accelerator.clip_grad_norm_(vae.parameters(), args.max_grad_norm)
 
                 optimizer.step()
@@ -928,8 +913,8 @@ def main(args):
             if args.validation_prompts is not None and epoch % args.validation_epochs == 0:
                 if args.use_ema:
                     # Store the UNet parameters temporarily and load the EMA parameters to perform inference.
-                    ema_unet.store(unet.parameters())
-                    ema_unet.copy_to(unet.parameters())
+                    ema_unet.store(reference_unet.parameters())
+                    ema_unet.copy_to(reference_unet.parameters())
                 #####################################
                 #
                 # Valerian FOUREL

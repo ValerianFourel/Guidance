@@ -1,6 +1,6 @@
 input_perturbation: 0.1
-pretrained_model_name_or_path: "SG161222/RealVisXL_V4.0"
-base_model_path:  "SG161222/RealVisXL_V4.0"
+pretrained_model_name_or_path: "SG161222/Realistic_Vision_V6.0_B1_noVAE"
+base_model_path:  "SG161222/Realistic_Vision_V6.0_B1_noVAE"
 image_encoder_path: "/home/vfourel/.cache/huggingface/hub/models--SG161222--RealVisXL_V4.0/image_encoder" # "SG161222/RealVisXL_V4.0/image_encoder"
 revision: null
 dataset_name: null
@@ -66,7 +66,7 @@ data:
   image_json_path: '/ps/scratch/ps_shared/vfourel/affectnet_41k_AffectOnly/EmocaProcessed_38k/Corpus_38k_train_split.json' # Your data root folder
   guids: 
     - 'flame'
-  image_size: 768
+  image_size: 512
   bbox_crop: False
   bbox_resize_ratio: [0.9, 1.5]
   aug_type: "Resize"

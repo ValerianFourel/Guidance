@@ -5,14 +5,16 @@ import torch.nn as nn
 import torch.nn.functional as F
 from einops import rearrange
 
-
+#########################################
+# VF
+#
 class InflatedConv3d(nn.Conv2d):
     def forward(self, x):
         video_length = x.shape[2]
-
-        x = rearrange(x, "b c f h w -> (b f) c h w")
+# we removed f for frames as we generate pictures
+        x = rearrange(x, "b c h w -> (b ) c h w")
         x = super().forward(x)
-        x = rearrange(x, "(b f) c h w -> b c f h w", f=video_length)
+        x = rearrange(x, "(b ) c h w -> b c  h w")
 
         return x
 
@@ -20,10 +22,11 @@ class InflatedConv3d(nn.Conv2d):
 class InflatedGroupNorm(nn.GroupNorm):
     def forward(self, x):
         video_length = x.shape[2]
+# we removed f for frames as we generate pictures
 
-        x = rearrange(x, "b c f h w -> (b f) c h w")
+        x = rearrange(x, "b c  h w -> (b ) c h w")
         x = super().forward(x)
-        x = rearrange(x, "(b f) c h w -> b c f h w", f=video_length)
+        x = rearrange(x, "(b ) c h w -> b c  h w")
 
         return x
 

@@ -40,8 +40,8 @@ class ChampFlameModel(nn.Module):
         self,
         noisy_latents,
         timesteps,
+        encoder_hidden_states,
         # ref_image_latents,
-        clip_image_embeds,
         multi_guidance_cond,
       #   uncond_fwd: bool = False,
     ):
@@ -49,6 +49,7 @@ class ChampFlameModel(nn.Module):
             multi_guidance_cond, self.guidance_input_channels, dim=1
         )
         guidance_fea_lst = []
+
         for guidance_idx, guidance_cond in enumerate(guidance_cond_group):
             guidance_encoder = getattr(
                 self, f"guidance_encoder_{self.guidance_types[guidance_idx]}"
@@ -71,8 +72,14 @@ class ChampFlameModel(nn.Module):
         model_pred = self.reference_unet( # VF: we just want to use the reference unet 
             noisy_latents,
             timesteps,
+            encoder_hidden_states= encoder_hidden_states,
             guidance_fea=guidance_fea,
-            encoder_hidden_states=clip_image_embeds,
+            added_cond_kwargs= {
+                "text_embeds": encoder_hidden_states , # You need to provide this
+                "time_ids":timesteps
+            },
+            
+       #     encoder_hidden_states=clip_image_embeds,
         ).sample
 
         return model_pred

@@ -109,14 +109,14 @@ class Transformer3DModel(ModelMixin, ConfigMixin):
     ):
         # Input
         assert (
-            hidden_states.dim() == 5
-        ), f"Expected hidden_states to have ndim=5, but got ndim={hidden_states.dim()}."
+            hidden_states.dim() == 4 # WE NEED 4 DIMENSIONS SINCE it'S a picture
+        ), f"Expected hidden_states to have ndim=4, but got ndim={hidden_states.dim()}."
         video_length = hidden_states.shape[2]
-        hidden_states = rearrange(hidden_states, "b c f h w -> (b f) c h w")
+        hidden_states = rearrange(hidden_states, "b c h w -> (b ) c h w")
         if encoder_hidden_states is not None:
             if encoder_hidden_states.shape[0] != hidden_states.shape[0]:
                 encoder_hidden_states = repeat(
-                    encoder_hidden_states, "b n c -> (b f) n c", f=video_length
+                    encoder_hidden_states, "b n c -> (b ) n c", 
                 )
 
         batch, channel, height, weight = hidden_states.shape
@@ -163,7 +163,7 @@ class Transformer3DModel(ModelMixin, ConfigMixin):
 
         output = hidden_states + residual
 
-        output = rearrange(output, "(b f) c h w -> b c f h w", f=video_length)
+        output = rearrange(output, "(b ) c h w -> b c  h w",)
         if not return_dict:
             return (output,)
 
