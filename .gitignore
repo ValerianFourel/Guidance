@@ -11,6 +11,8 @@ models/__pycache__/transformer_3d.cpython-310.pyc
 models/__pycache__/unet_2d_condition.cpython-310.pyc
 # Ignore the wandb folder and all its contents
 wandb/
+output/
+output_1024persteps/
 
 # Optionally, you might want to ignore wandb files in any subdirectory
 **/wandb/
