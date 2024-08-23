@@ -9,28 +9,29 @@ train_data_dir: null
 image_column: "image"
 caption_column: "text"
 max_train_samples: null
-validation_prompts: "null"
-output_dir: "/ps/scratch/ps_shared/vfourel/StableFace/sd-model-finetuned-l1-snr05-lr07"
+validation_prompts_original: "/ps/project/EmotionalFacialAnimation/data/affectnet/Manually_Annotated/Manually_Annotated_Images/1221/f4c723bc4c836911104c31257f96628ff5f2e9793bef4a882c37ae64.jpg"
+validation_prompts: ["Neutral, Person, youthful, fair skin, light brown hair, casual style, blue eyes, neutral expression, relaxed/contemplative, plaid shirt, casual attire, solid color background"]
+output_dir: "/ps/scratch/ps_shared/vfourel/ChampFace/sd-model-finetuned-l1-snr50-lr06" #sd-model-finetuned-l1-snr10-lr05 is the last one
 cache_dir: null
 seed: null
 resolution: 512
 center_crop: false
 random_flip: false
-train_batch_size: 4
-num_train_epochs: 1000
+train_batch_size: 8
+num_train_epochs: 100
 max_train_steps: null
-gradient_accumulation_steps: 4
+gradient_accumulation_steps: 16
 gradient_checkpointing: false
-learning_rate: 5e-7
+learning_rate: 1e-6
 scale_lr: false
-lr_scheduler: "constant"
-lr_warmup_steps: 5
-snr_gamma: 1.0
+lr_scheduler: "polynomial"
+lr_warmup_steps: 10
+snr_gamma: 5.0
 use_8bit_adam: false
 allow_tf32: false
 use_ema: false
 non_ema_revision: null
-dataloader_num_workers: 2
+dataloader_num_workers: 4
 adam_beta1: 0.9
 adam_beta2: 0.999
 adam_weight_decay: 1e-2
@@ -44,7 +45,7 @@ logging_dir: "logs"
 mixed_precision: null
 report_to: "tensorboard"
 local_rank: -1
-checkpointing_steps: 100000
+checkpointing_steps: 64
 checkpoints_total_limit: null
 resume_from_checkpoint: null
 enable_xformers_memory_efficient_attention: false
@@ -62,7 +63,7 @@ guidance_encoder_kwargs:
 # Added by VF
 #
 data:
-  train_bs: 4
+  train_bs: 8
   image_json_path: '/ps/scratch/ps_shared/vfourel/affectnet_41k_AffectOnly/EmocaProcessed_38k/Corpus_38k_train_split.json' # Your data root folder
   guids: 
     - 'flame'
@@ -85,7 +86,7 @@ solver:
   learning_rate: 1.0e-5
   scale_lr: False 
   lr_warmup_steps: 1
-  lr_scheduler: 'constant'
+  lr_scheduler: 'linear'
 
   # optimizer
   use_8bit_adam: False 

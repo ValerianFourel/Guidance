@@ -188,7 +188,7 @@ class StableDiffusionPipeline(
 
         unet: UNet2DConditionModel,
         # Modification by Valerian
-        guidance_encoder_flame: GuidanceEncoder,
+    #    guidance_encoder_flame: GuidanceEncoder,
         # how to make a guidance encoder
         #####################
         scheduler: KarrasDiffusionSchedulers,
@@ -275,7 +275,7 @@ class StableDiffusionPipeline(
             ###############################################
             #
             # Valerian FOUREL 
-            guidance_encoder_flame = guidance_encoder_flame,
+           # guidance_encoder_flame = guidance_encoder_flame,
         )
         self.vae_scale_factor = 2 ** (len(self.vae.config.block_out_channels) - 1)
         self.image_processor = VaeImageProcessor(vae_scale_factor=self.vae_scale_factor)
@@ -766,8 +766,8 @@ class StableDiffusionPipeline(
         ###########################
         #
         # Added by Valerian FOUREL
-        multi_guidance_lst,
-        guidance_types: List[str] = ['flame'],
+        multi_guidance_lst: Optional[int] = None,
+        guidance_types: Optional[List[str]] = ['flame'],
         ###########################
         prompt: Union[str, List[str]] = None,
         height: Optional[int] = None,
@@ -905,8 +905,9 @@ class StableDiffusionPipeline(
         height = height or self.unet.config.sample_size * self.vae_scale_factor
         width = width or self.unet.config.sample_size * self.vae_scale_factor
         # to deal with lora scaling and other possible forward hooks
-
+        print(prompt,'prompt')
         # 1. Check inputs. Raise error if not correct
+        prompt = "Neutral, Person, youthful, fair skin, light brown hair, casual style, blue eyes, neutral expression, relaxed/contemplative, plaid shirt, casual attire, solid color background"
         self.check_inputs(
             prompt,
             height,
@@ -1008,19 +1009,19 @@ class StableDiffusionPipeline(
     #
     # Valerian FOUREL Modifcations
     #
-        do_classifier_free_guidance = self.guidance_scale > 1.0
-        guidance_fea_lst = []
-        for guid_idx, guidance_image in enumerate(multi_guidance_lst):
-            guidance_tensor = torch.from_numpy(np.array(guidance_image.resize((width, height)))) / 255.
-            guidance_tensor = guidance_tensor.permute(2, 0, 1).unsqueeze(0).unsqueeze(2)  # (1, c, 1, h, w)
+        # do_classifier_free_guidance = self.guidance_scale > 1.0
+        # guidance_fea_lst = []
+        # for guid_idx, guidance_image in enumerate(multi_guidance_lst):
+        #     guidance_tensor = torch.from_numpy(np.array(guidance_image.resize((width, height)))) / 255.
+        #     guidance_tensor = guidance_tensor.permute(2, 0, 1).unsqueeze(0).unsqueeze(2)  # (1, c, 1, h, w)
             
-            guidance_type = guidance_types[guid_idx]
-            guidance_encoder = getattr(self, f"guidance_encoder_{guidance_type}")
-            guidance_tensor = guidance_tensor.to(device, guidance_encoder.dtype)
-            guidance_fea_lst += [guidance_encoder(guidance_tensor)]
+        #     guidance_type = guidance_types[guid_idx]
+        #     guidance_encoder = getattr(self, f"guidance_encoder_{guidance_type}")
+        #     guidance_tensor = guidance_tensor.to(device, guidance_encoder.dtype)
+        #     guidance_fea_lst += [guidance_encoder(guidance_tensor)]
             
-        guidance_fea = torch.stack(guidance_fea_lst, dim=0).sum(0)
-        guidance_fea = torch.cat([guidance_fea] * 2) if do_classifier_free_guidance else guidance_fea
+        # guidance_fea = torch.stack(guidance_fea_lst, dim=0).sum(0)
+        # guidance_fea = torch.cat([guidance_fea] * 2) if do_classifier_free_guidance else guidance_fea
     #######################################################################
 
         # 7. Denoising loop
@@ -1047,7 +1048,7 @@ class StableDiffusionPipeline(
                     #####################################
                     #
                     # Valerian FOUREL modifications
-                    guidance_fea=guidance_fea,
+                  #  guidance_fea=guidance_fea,
                     #####################################
                     return_dict=False,
                 )[0]

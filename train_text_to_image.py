@@ -64,6 +64,9 @@ from transformers import CLIPVisionModelWithProjection
 from datasets.image_dataset import ImageDataset
 import os
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
+from accelerate import DistributedDataParallelKwargs
+
+
 ###########################
 from diffusers.optimization import get_scheduler
 from diffusers.training_utils import EMAModel , compute_snr
@@ -71,31 +74,20 @@ from diffusers.utils import check_min_version, deprecate, is_wandb_available, ma
 from diffusers.utils.import_utils import is_xformers_available
 from PIL import Image
 from pipeline.pipeline_stable_diffusion import StableDiffusionPipeline
-# import subprocess
-# import sys
-
-# def install_package(package):
-#     subprocess.check_call([sys.executable, "-m", "pip", "install", package])
 
 import subprocess
 import sys
 
-# def install_package(package):
-#     subprocess.check_call([sys.executable, "-m", "pip", "install", "--user", package])
-
 # # Use this to install wandb
-# install_package("wandb")
 # # Example usage to install `wandb`
-# #install_package("wandb")
 
 import wandb
-wandb.init(project="StableFace")
+wandb.init(project="ChampFace")
 import json
-# run = wandb.init(project="StableFace", entity="valerian-fourel")
 
 
 #annotation_file = '/home/vfourel/FaceGPT/Data/LLaVAAnnotations/StableDiffusionPrompts/prompt_response_conversation_All_data.json'
-model_id = "SG161222/RealVisXL_V4.0"
+model_id = "SG161222/Realistic_Vision_V6.0_B1_noVAE"
 annotation_file = '/home/vfourel/FaceGPT/Data/LLaVAAnnotations/StableDiffusionPrompts/PromptsSmall07_41ksamples.json'
 
 # Define your dataset class
@@ -210,7 +202,7 @@ More information on all the CLI arguments and the environment are available on y
         f.write(yaml + model_card)
 
 
-def log_validation(vae, text_encoder, tokenizer, unet, guidance_encoder_flame, args, accelerator, weight_dtype, epoch):
+def log_validation(vae, text_encoder, tokenizer, unet, args, accelerator, weight_dtype,guidance_encoder_flame):
     logger.info("Running validation... ")
 
     pipeline = StableDiffusionPipeline.from_pretrained(
@@ -237,41 +229,28 @@ def log_validation(vae, text_encoder, tokenizer, unet, guidance_encoder_flame, a
 
     images = []
     for i in range(len(args.validation_prompts)):
+        print(args.validation_prompts)
         with torch.autocast("cuda"):
-            image = pipeline(args.validation_prompts[i], num_inference_steps=20, generator=generator).images[0]
+            image = pipeline(prompt=args.validation_prompts[i], num_inference_steps=20, generator=generator).images[0]
 
         images.append(image)
 
+    import os
+    from datetime import datetime
 
-    for tracker in accelerator.trackers:
-        if tracker.name == "wandb":
-            tracker.log(
-                {
-                    "validation": [
-                        wandb.Image(image, caption=f"{i}: {args.validation_prompts[i]}")
-                        for i, image in enumerate(images)
-                    ]
-                }
-            )
-        else:
-            logger.warn(f"image logging not implemented for {tracker.name}")
-    # for tracker in accelerator.trackers:
-    #     if tracker.name == "tensorboard":
-    #         np_images = np.stack([np.asarray(img) for img in images])
-    #         tracker.writer.add_images("validation", np_images, epoch, dataformats="NHWC")
-    #     elif tracker.name == "wandb":
-    #         tracker.log(
-    #             {
-    #                 "validation": [
-    #                     wandb.Image(image, caption=f"{i}: {args.validation_prompts[i]}")
-    #                     for i, image in enumerate(images)
-    #                 ]
-    #             }
-    #         )
-    #     else:
-    #         logger.warn(f"image logging not implemented for {tracker.name}")
+    # Create the output directory if it doesn't exist
+    output_dir = "output_1024persteps"
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
+
 
     del pipeline
+        # Save the image with a timestamped filename
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    image_path = os.path.join(output_dir, f"image_{i}_{timestamp}.png")
+    image.save(image_path)
+
+    print(f"Image saved at {image_path}")
     torch.cuda.empty_cache()
 
     return images
@@ -291,13 +270,20 @@ def main(args):
     logging_dir = os.path.join(args.output_dir, args.logging_dir)
 
     accelerator_project_config = ProjectConfiguration(project_dir=args.output_dir, logging_dir=logging_dir)
+    
+    #########################################################
+    # VF
+    ddp_kwargs = DistributedDataParallelKwargs(find_unused_parameters=True)
+
 
     accelerator = Accelerator(
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         mixed_precision=args.mixed_precision,
         log_with=args.report_to,
         project_config=accelerator_project_config,
+        kwargs_handlers=[ddp_kwargs]
     )
+    #########################################################
 
     # Make one log on every process with the configuration for debugging.
     logging.basicConfig(
@@ -389,7 +375,6 @@ def main(args):
             param.requires_grad_(True)
             
     for module in guidance_encoder_flame.values():
-        print('module of the guidance encoder flame',module)
         module.requires_grad_(True)
             
     reference_control_writer = ReferenceAttentionControl(
@@ -398,12 +383,7 @@ def main(args):
         mode="write",
         fusion_blocks="full",
     )
-    # reference_control_reader = ReferenceAttentionControl(
-    #     denoising_unet,
-    #     do_classifier_free_guidance=False,
-    #     mode="read",
-    #     fusion_blocks="full",
-    # )
+
   
     model = ChampFlameModel(
             reference_unet,
@@ -461,7 +441,7 @@ def main(args):
                 logger.warn(
                     "xFormers 0.0.16 cannot be used for training in some GPUs. If you observe problems during training, please update xFormers to at least 0.0.17. See https://huggingface.co/docs/diffusers/main/en/optimization/xformers for more details."
                 )
-            unet.enable_xformers_memory_efficient_attention()
+            reference_unet.enable_xformers_memory_efficient_attention()
         else:
             raise ValueError("xformers is not available. Make sure it is installed correctly")
 
@@ -759,8 +739,10 @@ def main(args):
         # We remove the last batch to keep a smooth training function
 
         for step, batch in enumerate(train_dataloader):
-            if step == total_batches - 1:
+            if step == total_batches - 2:
                 break
+            # if step == 2:
+            #     break
             with torch.no_grad():  # If you're not training the text encoder, use no_grad to save memory
                   text_embeddings = text_encoder(batch["input_ids"])[0]
 
@@ -899,8 +881,18 @@ def main(args):
                                     shutil.rmtree(removing_checkpoint)
 
                         save_path = os.path.join(args.output_dir, f"checkpoint-{global_step}")
-                        accelerator.save_state(save_path)
+                        if torch.cuda.device_count() == 1:
+                            model.save_model(save_path)  # Save model directly if only one GPU is available
+                        else:
+                            accelerator.save_state(save_path)  # Save accelerator state if multiple GPUs are used
                         logger.info(f"Saved state to {save_path}")
+
+            # Log to wandb
+            wandb.log({
+                "train_loss": train_loss,
+                "loss": loss.item(),
+                "learning_rate": lr_scheduler.get_last_lr()[0]
+            }, step=global_step)
 
             logs = {"step_loss": loss.detach().item(), "lr": lr_scheduler.get_last_lr()[0]}
             progress_bar.set_postfix(**logs)
@@ -918,22 +910,22 @@ def main(args):
                 #####################################
                 #
                 # Valerian FOUREL
-                guidance_encoder_flame = setup_guidance_encoder(args)
-                for module in guidance_encoder_flame.values():
-                    print(module)
-                    module.requires_grad_(True)
+                # guidance_encoder_flame = setup_guidance_encoder(args)
+                # for module in guidance_encoder_flame.values():
+                #     module.requires_grad_(True)
                 #####################################
                 log_validation(
                     vae,
                     text_encoder,
                     tokenizer,
-                    unet,
-                    guidance_encoder_flame, # we add this 
+                    reference_unet,
                     args,
                     accelerator,
                     weight_dtype,
-                    global_step,
+                    guidance_encoder_flame
                 )
+
+
                 if args.use_ema:
                     # Switch back to the original UNet parameters.
                     ema_unet.restore(unet.parameters())
@@ -972,8 +964,9 @@ def main(args):
                 generator = torch.Generator(device=accelerator.device).manual_seed(args.seed)
 
             for i in range(len(args.validation_prompts)):
+                print(args.validation_prompts)
                 with torch.autocast("cuda"):
-                    image = pipeline(args.validation_prompts[i], num_inference_steps=20, generator=generator).images[0]
+                    image = pipeline(multi_guidance_lst = "",prompt = args.validation_prompts[i], num_inference_steps=20, generator=generator).images[0]
                 images.append(image)
 
         if args.push_to_hub:
