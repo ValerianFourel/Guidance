@@ -1,5 +1,8 @@
 pretrained_model_name_or_path: "SG161222/Realistic_Vision_V6.0_B1_noVAE"
-finetuned_model: "/ps/scratch/ps_shared/vfourel/ChampFace/sd-model-finetuned-l1-snr50-lr06/checkpoint-4/"
+finetuned_model: "/ps/scratch/ps_shared/vfourel/ChampFace/sd-model-finetuned-l1-snr50-lr06/checkpoint-200/"
+revision: null
+seed: null
+
 guidance_encoder_kwargs:
   guidance_embedding_channels: 320
   guidance_input_channels: 3

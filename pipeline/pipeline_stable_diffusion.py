@@ -905,9 +905,9 @@ class StableDiffusionPipeline(
         height = height or self.unet.config.sample_size * self.vae_scale_factor
         width = width or self.unet.config.sample_size * self.vae_scale_factor
         # to deal with lora scaling and other possible forward hooks
-        print(prompt,'prompt')
+        #print(prompt,'prompt')
         # 1. Check inputs. Raise error if not correct
-        prompt = "Neutral, Person, youthful, fair skin, light brown hair, casual style, blue eyes, neutral expression, relaxed/contemplative, plaid shirt, casual attire, solid color background"
+        #prompt = "Neutral, Person, youthful, fair skin, light brown hair, casual style, blue eyes, neutral expression, relaxed/contemplative, plaid shirt, casual attire, solid color background"
         self.check_inputs(
             prompt,
             height,

@@ -6,12 +6,17 @@ from models.unet_2d_condition import UNet2DConditionModel
 from models.mutual_self_attention import ReferenceAttentionControl
 from models.guidance_encoder import GuidanceEncoder
 from pipeline.pipeline_stable_diffusion import StableDiffusionPipeline
+from diffusers import StableDiffusionPipeline as StableDiffusionPipelineOriginal
 import argparse
 from omegaconf import OmegaConf
 
 import torch
 from collections import OrderedDict
 from pprint import pprint
+
+negative_prompt = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
+
+negative_prompt2 = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime, mutated hands and fingers:1.4), (deformed, distorted, disfigured:1.3), poorly drawn, bad anatomy, wrong anatomy, extra limb, missing limb, floating limbs, disconnected limbs, mutation, mutated, ugly, disgusting, amputation"
 
 def inspect_model_file(file_path):
     # Load the state dict
@@ -114,22 +119,22 @@ def load_models(args):
             reference_control_writer,
             guidance_encoder_flame,
         )
-    return tokenizer, text_encoder, vae, model
+    return guidance_encoder_flame, reference_unet, tokenizer, text_encoder, vae, model
 
-def run_inference(args):
+def run_inference(args,negative_prompt=negative_prompt):
     # Load models
-    tokenizer, text_encoder, vae, model = load_models(args)
+    guidance_encoder_flame, reference_unet, tokenizer, text_encoder, vae, model = load_models(args)
     
     # Set up pipeline
     scheduler = DDPMScheduler.from_pretrained(args.pretrained_model_name_or_path, subfolder="scheduler")
-    pipeline = StableDiffusionPipeline(
-        text_encoder=text_encoder,
-        vae=vae,
-        unet=model,
-        tokenizer=tokenizer,
-        scheduler=scheduler,
-    )
-    
+    pipeline = StableDiffusionPipeline.from_pretrained(
+            args.finetuned_model,
+            text_encoder=text_encoder, # we have to 
+            vae=vae,
+            unet=reference_unet,
+            guidance_encoder_flame=guidance_encoder_flame,
+            revision=args.revision,
+        )
     # Move to device
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     pipeline = pipeline.to(device)
@@ -138,8 +143,8 @@ def run_inference(args):
     generator = torch.Generator(device=device).manual_seed(args.seed) if args.seed is not None else None
     
     # Run inference
-    prompt = "Your inference prompt here"
-    negative_prompt = "negative_prompt here"
+    prompt = "Disgust, Man"
+    negative_prompt = negative_prompt
     multi_guidance_lst = "Your multi-guidance list here"  # Adjust based on your model's requirements
     
     with torch.no_grad():
@@ -155,9 +160,9 @@ def run_inference(args):
     return image
 
 
-def load_model(model_id="SG161222/Realistic_Vision_V6.0_B1_noVAE", device="cuda"):
+def load_model_original(model_id="SG161222/Realistic_Vision_V6.0_B1_noVAE", device="cuda"):
     # Load the model pipeline
-    pipeline = StableDiffusionPipeline.from_pretrained(model_id)
+    pipeline = StableDiffusionPipelineOriginal.from_pretrained(model_id)
     
     # Move to the appropriate device
     if torch.cuda.is_available() and device == "cuda":
@@ -167,7 +172,7 @@ def load_model(model_id="SG161222/Realistic_Vision_V6.0_B1_noVAE", device="cuda"
     
     return pipeline
 
-def generate_image(prompt, model, num_inference_steps=50, guidance_scale=7.5, negative_prompt='blurry,flying'):
+def generate_image(prompt, model, num_inference_steps=50, guidance_scale=7.5, negative_prompt=negative_prompt):
     # Generate an image from the prompt with an optional negative prompt
     with torch.no_grad():
         image = model(prompt=prompt, 
@@ -185,23 +190,23 @@ def main(args):
     #inspect_model_file(file_path)
     # Define your prompt
     prompt = "A photorealistic painting of a futuristic city at sunset, with flying cars and neon lights"
-
+    prompt = "Man, Disgust"
     # Load the model
-    model = load_model()
+    model = load_model_original()
 
     # Generate the image
     image = generate_image(prompt, model)
 
     # Save the image
-    save_image(image, "generated_image3.png")
+    save_image(image, "generated_image6.png")
 
-    print("Image generated and saved as 'generated_image3.png'")
+    print("Image generated and saved as 'generated_image5.png'")
 
     image_finetune = run_inference(args)
 
-    save_image(image_finetune, "image_finetune.png")
+    save_image(image_finetune, "image_finetune7.png")
 
-    print("Image generated and saved as 'image_finetune.png'")
+    print("Image generated and saved as 'image_finetune2.png'")
 
 if __name__ == "__main__":
     import shutil
