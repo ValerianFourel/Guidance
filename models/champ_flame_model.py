@@ -60,22 +60,11 @@ class ChampFlameModel(nn.Module):
             flame_encoder = getattr(self, f"guidance_encoder_{guidance_type}")
             torch.save(flame_encoder.state_dict(), os.path.join(flame_encoder_dir, f"guidance_encoder_{guidance_type}.pth"))
         
-        # Save the unet in a stable diffusion v1.5 subfolder
-        unet_dir = os.path.join(save_directory, "stable_diffusion-v1-5")
-        os.makedirs(unet_dir, exist_ok=True)
-        # Save the UNet model in the directory
-        self.reference_unet.save_pretrained(unet_dir)
+        # Save the reference UNet model directly as diffusion_pytorch_model.bin
+        unet_save_path = os.path.join(save_directory, "unet")
+        os.makedirs(unet_save_path, exist_ok=True)
+        torch.save(self.reference_unet.state_dict(), os.path.join(unet_save_path, "diffusion_pytorch_model.bin"))
 
-        # Define the paths
-        original_file_path = os.path.join(unet_dir, "diffusion_pytorch_model.safetensors")
-        new_file_path = os.path.join(save_directory, "diffusion_pytorch_model.bin")
-
-        # Rename (move) the file
-        shutil.move(original_file_path, new_file_path)
-        
-        # Save other components
-        #torch.save(self.reference_control_writer.state_dict(), os.path.join(save_directory, "reference_control_writer.pt"))
-        
         # Save the model's config
         config = {
             "model_type": "ChampFlameModel",
@@ -92,10 +81,14 @@ class ChampFlameModel(nn.Module):
     def save_pretrained(self, save_directory):
         # Create the directory if it doesn't exist
         os.makedirs(save_directory, exist_ok=True)
-        
+                # Save the reference UNet model directly as diffusion_pytorch_model.bin
+        unet_save_path = os.path.join(save_directory, "unet")
+        os.makedirs(unet_save_path, exist_ok=True)
+        torch.save(self.reference_unet.state_dict(), os.path.join(unet_save_path, "diffusion_pytorch_model.bin"))
+
         # Save the reference UNet model
-        self.reference_unet.save_pretrained(save_directory)
-        
+        #self.reference_unet.save_pretrained(save_directory)
+
 
         # Save the flame encoder in a 'flame_encoder' subfolder in the parent directory of save_directory
         parent_directory = os.path.dirname(save_directory)

@@ -928,12 +928,12 @@ def main(args):
 
                 if args.use_ema:
                     # Switch back to the original UNet parameters.
-                    ema_unet.restore(unet.parameters())
+                    ema_unet.restore(reference_unet.parameters())
 
     # Create the pipeline using the trained modules and save it.
     accelerator.wait_for_everyone()
     if accelerator.is_main_process:
-        unet = accelerator.unwrap_model(unet)
+        unet = accelerator.unwrap_model(reference_unet)
         if args.use_ema:
             ema_unet.copy_to(unet.parameters())
 
@@ -941,7 +941,7 @@ def main(args):
             args.pretrained_model_name_or_path,
             text_encoder=text_encoder, # we have to 
             vae=vae,
-            unet=unet,
+            unet=reference_unet,
             guidance_encoder_flame=guidance_encoder_flame,
             revision=args.revision,
         )
