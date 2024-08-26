@@ -121,7 +121,13 @@ def load_models(args):
         )
     return guidance_encoder_flame, reference_unet, tokenizer, text_encoder, vae, model
 
-def run_inference(args,negative_prompt=negative_prompt):
+def run_inference_ChampModel(args,negative_prompt=negative_prompt):
+    guidance_encoder_flame, reference_unet, tokenizer, text_encoder, vae, model = load_models(args)
+    demonstrationPaths = "/home/vfourel/FaceGPT/Data/FlameImagesAffectnet/demonstration.json"
+
+
+
+def run_inference_pipeline(args,negative_prompt=negative_prompt):
     # Load models
     guidance_encoder_flame, reference_unet, tokenizer, text_encoder, vae, model = load_models(args)
     

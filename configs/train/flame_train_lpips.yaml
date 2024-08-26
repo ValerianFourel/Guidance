@@ -11,16 +11,16 @@ caption_column: "text"
 max_train_samples: null
 validation_prompts_original: "/ps/project/EmotionalFacialAnimation/data/affectnet/Manually_Annotated/Manually_Annotated_Images/1221/f4c723bc4c836911104c31257f96628ff5f2e9793bef4a882c37ae64.jpg"
 validation_prompts: ["Neutral, Person, youthful, fair skin, light brown hair, casual style, blue eyes, neutral expression, relaxed/contemplative, plaid shirt, casual attire, solid color background"]
-output_dir: "/ps/scratch/ps_shared/vfourel/ChampFace/sd-model-finetuned-l1-snr60-lr06-1024pics" #sd-model-finetuned-l1-snr10-lr05 is the last one
+output_dir: "/ps/scratch/ps_shared/vfourel/ChampFace/sd-model-finetuned-l1-snr60-lr06-trial" #sd-model-finetuned-l1-snr10-lr05 is the last one
 cache_dir: null
 seed: null
 resolution: 512
 center_crop: false
 random_flip: false
-train_batch_size: 8
+train_batch_size: 2
 num_train_epochs: 100
 max_train_steps: null
-gradient_accumulation_steps: 32
+gradient_accumulation_steps: 2
 gradient_checkpointing: false
 learning_rate: 1e-6
 scale_lr: false
@@ -45,7 +45,7 @@ logging_dir: "logs"
 mixed_precision: null
 report_to: "tensorboard"
 local_rank: -1
-checkpointing_steps: 32
+checkpointing_steps: 1000
 checkpoints_total_limit: null
 resume_from_checkpoint: null
 enable_xformers_memory_efficient_attention: false

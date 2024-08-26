@@ -65,7 +65,11 @@ from datasets.image_dataset import ImageDataset
 import os
 os.environ['CUDA_LAUNCH_BLOCKING'] = '1'
 from accelerate import DistributedDataParallelKwargs
-
+from lpips import LPIPS  # Assuming you have the LPIPS library available
+from visualization.visualization_utils import tensor_to_grid_picture
+import torch
+from torch.nn.parallel import parallel_apply
+from functools import partial
 
 ###########################
 from diffusers.optimization import get_scheduler
@@ -255,6 +259,85 @@ def log_validation(vae, text_encoder, tokenizer, unet, args, accelerator, weight
 
     return images
 
+########################################################################
+# VF: function to get the predicted image from the noise residuals
+#
+
+def process_batch_image_pred_old(model_pred, timesteps, noisy_latents, noise_scheduler, vae):
+    batch_size = model_pred.shape[0]
+    denoised_latents_list = []
+
+    for i in range(batch_size):
+        denoised_latents = noise_scheduler.step(
+            model_output=model_pred[i],
+            timestep=timesteps[i],
+            sample=noisy_latents[i]
+        ).pred_original_sample
+
+        denoised_latents = 1 / 0.18215 * denoised_latents
+        denoised_latents_list.append(denoised_latents)
+
+
+    denoised_latents_batch = torch.stack(denoised_latents_list)
+    #print(denoised_latents_batch.shape, denoised_latents_batch[0].shape)
+
+    image_pred = vae.decode(denoised_latents_batch.unsqueeze(0)).sample
+
+    return image_pred
+
+
+
+def process_single_image(model_pred, timestep, noisy_latent, noise_scheduler,vae,model_dtype):
+    model_dtype = model_dtype 
+    model_pred = model_pred.to(dtype=model_dtype)
+    noisy_latent = noisy_latent.to(dtype=model_dtype)
+    denoised_latents = noise_scheduler.step(
+        model_output=model_pred,
+        timestep=timestep,
+        sample=noisy_latent
+    ).pred_original_sample
+    scaled_denoised_latents = 1 / 0.18215 * denoised_latents
+    print(scaled_denoised_latents.shape)
+    image_pred =  vae.decode(scaled_denoised_latents.unsqueeze(0)).sample
+    return image_pred
+
+def process_batch_image_pred(model_pred, timesteps, noisy_latents, noise_scheduler, vae,model_dtype):
+    batch_size = model_pred.shape[0]
+    
+
+    # Create a partial function with fixed noise_scheduler
+    process_fn = partial(process_single_image, noise_scheduler=noise_scheduler,vae=vae,model_dtype = model_dtype )
+
+    # Prepare inputs for parallel processing
+    inputs = list(zip(model_pred, timesteps, noisy_latents))
+
+    # Process in parallel
+    denoised_latents_list = parallel_apply(
+        [process_fn] * batch_size,
+        inputs
+    )
+    # denoised_latents_list = []
+
+    # for i in range(batch_size):
+    #     denoised_latent = process_single_image(
+    #         model_pred[i],
+    #         timesteps[i],
+    #         noisy_latents[i],
+    #         noise_scheduler,
+    #         vae
+    #     )
+    #     denoised_latents_list.append(denoised_latent)
+
+    # Stack the results
+    denoised_latents_batch = torch.stack(denoised_latents_list).squeeze(1)
+
+    # Decode the entire batch at once
+    image_pred = denoised_latents_batch #vae.decode(denoised_latents_batch).sample
+    print(denoised_latents_batch.shape, denoised_latents_batch[0].shape)
+
+    return image_pred
+##################################################################
+
 
 def main(args):
 
@@ -367,6 +450,11 @@ def main(args):
     
     # Freeze some modules
     vae.requires_grad_(False)
+    ########################################
+    # VF: WE NEED THIS for the lpips loss 
+    #
+    model_dtype = next(vae.parameters()).dtype
+    ########################################
     #image_enc.requires_grad_(False)
     for name, param in reference_unet.named_parameters():
         if "up_blocks.3" in name:
@@ -384,12 +472,18 @@ def main(args):
         fusion_blocks="full",
     )
 
-  
+  #############################################################
+  # modified by VF
+  #
     model = ChampFlameModel(
             reference_unet,
             reference_control_writer,
             guidance_encoder_flame,
         )
+    
+    # Initialize LPIPS loss
+    lpips_loss = LPIPS(net='vgg').to(accelerator.device)  # You can use 'alex', 'vgg', or 'squeeze' as the network
+###################################################################################
     if args.solver.enable_xformers_memory_efficient_attention:
         if is_xformers_available():
             reference_unet.enable_xformers_memory_efficient_attention()        
@@ -410,14 +504,7 @@ def main(args):
     # this is the original
     vae.requires_grad_(False)
 
-    ##### to be modified #####
 
-    # experiment #1 
-    # vae.requires_grad_(True)
-    # vae.train()
-
-
-    #############################
     text_encoder.requires_grad_(False)
     model.train() # VF: modified from unet
 
@@ -535,8 +622,6 @@ def main(args):
 
 
 
-    # DataLoaders creation:
-    # train_dataset = CustomDataset(annotation_file=annotation_file, tokenizer=tokenizer, transform=train_transforms)
 
 #######################################################
 #
@@ -560,12 +645,7 @@ def main(args):
 #
 # VF: modify this function
 
-    # def collate_fn(examples):
-    #     pixel_values = torch.stack([example["image"] for example in examples])
-    #     pixel_values = pixel_values.to(memory_format=torch.contiguous_format).float()
-    #     input_ids = torch.stack([example["input_ids"] for example in examples])
-    #     return {"pixel_values": pixel_values, "input_ids": input_ids}
-    
+
     def collate_fn(examples):
         # Assuming `tgt_img` contains the image data
         pixel_values = torch.stack([example["tgt_img"] for example in examples])
@@ -673,7 +753,8 @@ def main(args):
         tracker_config = dict(vars(args))
         print(tracker_config)
         tracker_config.pop("validation_prompts", None)
-        
+    # we need to define the model_dtype
+    model_dtype = next(vae.parameters()).dtype
         # Initialize only WandB tracker, skip TensorBoard
         # accelerator.init_trackers(args.tracker_project_name, config=tracker_config, init_kwargs={"wandb": {"entity": "your_wandb_entity"}})
         ##############################################################################################################################
@@ -751,6 +832,9 @@ def main(args):
             ###### figure out the training using guidance
             with accelerator.accumulate(model):
                 # Convert images to latent space
+                # you want to compare the batch["pixel_values"], with the noise_repdiction 
+                # passed by the vae (which is what reconstruct the images)
+                # you then want to do  lpips to it.
                 latents = vae.encode(batch["pixel_values"].to(weight_dtype)).latent_dist.sample()
                 latents = latents * vae.config.scaling_factor
 
@@ -811,14 +895,17 @@ def main(args):
 
 
                 # Predict the noise residual and compute loss
-                model_pred = model(noisy_latents, timesteps,encoder_hidden_states= encoder_hidden_states,multi_guidance_cond = batch["tgt_guids"])#.sample
-
+                model_pred = model(noisy_latents, timesteps,encoder_hidden_states= encoder_hidden_states,multi_guidance_cond = batch["tgt_guids"])
+                model_pred = model_pred.sample
                 #     # Compute loss-weights as per Section 3.4 of https://arxiv.org/abs/2303.09556.
                 #     # Since we predict the noise instead of x_0, the original formulation is slightly changed.
                 #     # This is discussed in Section 4.2 of the same paper.
 
                 if args.snr_gamma is None:
-                    loss = F.l1_loss(model_pred.float(), target.float(), reduction="mean")
+                    l1_loss = F.l1_loss(model_pred.float(), target.float(), reduction="mean")
+                    lpips_value = lpips_loss(model_pred.float(), target.float()).mean()
+                    loss = l1_loss + lpips_value
+
                 else:
                     # Compute loss-weights as per Section 3.4 of https://arxiv.org/abs/2303.09556.
                     # Since we predict the noise instead of x_0, the original formulation is slightly changed.
@@ -831,9 +918,42 @@ def main(args):
                         torch.stack([snr, args.snr_gamma * torch.ones_like(timesteps)], dim=1).min(dim=1)[0] / snr
                     )
 
-                    loss = F.l1_loss(model_pred.float(), target.float(), reduction="none")
-                    loss = loss.mean(dim=list(range(1, len(loss.shape)))) * l1_loss_weights
-                    loss = loss.mean()
+                    l1_loss = F.l1_loss(model_pred.float(), target.float(), reduction="none")
+                    l1_loss = l1_loss.mean(dim=list(range(1, len(l1_loss.shape)))) * l1_loss_weights
+                    l1_loss = l1_loss.mean()
+                        # perform guidance
+                    #print(model_pred.shape)
+                    image_pred_batch = process_batch_image_pred(model_pred, timesteps, noisy_latents, noise_scheduler, vae,model_dtype)
+                    # print('image_pred_batch',image_pred_batch.shape)
+                    # print('timesteps',timesteps)
+                    # print('noisy_latents',noisy_latents.shape)
+                    #tensor_to_grid_picture(image_pred_batch,'image_check','pred.png')
+                    #tensor_to_grid_picture(batch["pixel_values"].to(weight_dtype),'image_check','original.png')
+                     # Calculate LPIPS loss
+                     # The exact method depends on your noise scheduler. Here's a general approach:
+                    # denoised_latents = noise_scheduler.step(
+                    #      model_output=model_pred[0],
+                    #     timestep=timesteps[0],
+                    #      sample=noisy_latents[0]
+                    #  ).pred_original_sample
+                    #print(denoised_latents)
+                    # denoised_latents = 1 / 0.18215 * denoised_latents
+                    # try:
+                    #     scaling_factor = reference_unet.config.scaling_factor
+                    #     print(scaling_factor, 'scaling_factor')
+                    # except:
+                    #     print('error')
+
+                    # print(denoised_latents.shape,denoised_latents[0].shape)
+                    #image_pred = vae.decode(denoised_latents.unsqueeze(0)).sample
+                    # print("VAE config:", vae.config)
+                    
+                    #print("image_pred shape:", image_pred.shape, model_pred.shape)
+                    # print("original shape:", batch["pixel_values"].to(weight_dtype).shape)
+                    lpips_value = lpips_loss(image_pred_batch.float(), batch["pixel_values"].to(weight_dtype).float()).mean()
+                    loss = l1_loss + lpips_value
+
+
                 # Gather the losses across all processes for logging (if we use distributed training).
                 avg_loss = accelerator.gather(loss.repeat(args.train_batch_size)).mean()
                 train_loss += avg_loss.item() / args.gradient_accumulation_steps
@@ -843,11 +963,19 @@ def main(args):
                 accelerator.backward(loss)
                 if accelerator.sync_gradients:
                     accelerator.clip_grad_norm_(reference_unet.parameters(), args.max_grad_norm)
-                    accelerator.clip_grad_norm_(vae.parameters(), args.max_grad_norm)
+                    # accelerator.clip_grad_norm_(vae.parameters(), args.max_grad_norm)
 
                 optimizer.step()
                 lr_scheduler.step()
                 optimizer.zero_grad()
+                ############################################################################
+                # VF: unallocated resources for the GPUs
+                #
+                torch.cuda.empty_cache()
+                del image_pred_batch
+                del lpips_value
+                del l1_loss
+                ############################################################################
 
             # Checks if the accelerator has performed an optimization step behind the scenes
             if accelerator.sync_gradients:
@@ -1005,7 +1133,7 @@ if __name__ == "__main__":
     import shutil
     
     parser = argparse.ArgumentParser()
-    parser.add_argument("--config", type=str, default="./configs/train/flame_train.yaml")
+    parser.add_argument("--config", type=str, default="./configs/train/flame_train_lpips.yaml")
     args = parser.parse_args()
 
     if args.config.endswith(".yaml"):

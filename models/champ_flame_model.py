@@ -61,7 +61,7 @@ class ChampFlameModel(nn.Module):
             torch.save(flame_encoder.state_dict(), os.path.join(flame_encoder_dir, f"guidance_encoder_{guidance_type}.pth"))
         
         # Save the reference UNet model directly as diffusion_pytorch_model.bin
-        unet_save_path = os.path.join(save_directory, "unet")
+        unet_save_path = save_directory # os.path.join(save_directory, "unet")
         os.makedirs(unet_save_path, exist_ok=True)
         torch.save(self.reference_unet.state_dict(), os.path.join(unet_save_path, "diffusion_pytorch_model.bin"))
 
@@ -82,7 +82,7 @@ class ChampFlameModel(nn.Module):
         # Create the directory if it doesn't exist
         os.makedirs(save_directory, exist_ok=True)
                 # Save the reference UNet model directly as diffusion_pytorch_model.bin
-        unet_save_path = os.path.join(save_directory, "unet")
+        unet_save_path = save_directory # os.path.join(save_directory, "unet")
         os.makedirs(unet_save_path, exist_ok=True)
         torch.save(self.reference_unet.state_dict(), os.path.join(unet_save_path, "diffusion_pytorch_model.bin"))
 
@@ -136,6 +136,6 @@ class ChampFlameModel(nn.Module):
             #     "time_ids":timesteps
             # }, 
        #     encoder_hidden_states=clip_image_embeds,
-        ).sample
+        )
 
         return model_pred
