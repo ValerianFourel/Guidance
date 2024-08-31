@@ -21,3 +21,4 @@ output_1024persteps/
 # wandb/**/*.log
 # wandb/**/*.yaml
 # wandb/**/events.out.tfevents.*
+**/*sd-model*/

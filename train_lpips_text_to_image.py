@@ -70,6 +70,9 @@ from visualization.visualization_utils import tensor_to_grid_picture
 import torch
 from torch.nn.parallel import parallel_apply
 from functools import partial
+from datetime import datetime
+
+negative_prompt = "(deformed iris, deformed pupils, semi-realistic, cgi, 3d, render, sketch, cartoon, drawing, anime:1.4), text, close up, cropped, out of frame, worst quality, low quality, jpeg artifacts, ugly, duplicate, morbid, mutilated, extra fingers, mutated hands, poorly drawn hands, poorly drawn face, mutation, deformed, blurry, dehydrated, bad anatomy, bad proportions, extra limbs, cloned face, disfigured, gross proportions, malformed limbs, missing arms, missing legs, extra arms, extra legs, fused fingers, too many fingers, long neck"
 
 ###########################
 from diffusers.optimization import get_scheduler
@@ -84,6 +87,7 @@ import sys
 
 # # Use this to install wandb
 # # Example usage to install `wandb`
+
 
 import wandb
 wandb.init(project="ChampFace")
@@ -206,7 +210,7 @@ More information on all the CLI arguments and the environment are available on y
         f.write(yaml + model_card)
 
 
-def log_validation(vae, text_encoder, tokenizer, unet, args, accelerator, weight_dtype,guidance_encoder_flame):
+def log_validation(vae, text_encoder, tokenizer, unet, args, accelerator, weight_dtype,guidance_encoder_flame,save_picture=False):
     logger.info("Running validation... ")
 
     pipeline = StableDiffusionPipeline.from_pretrained(
@@ -215,7 +219,7 @@ def log_validation(vae, text_encoder, tokenizer, unet, args, accelerator, weight
         text_encoder=accelerator.unwrap_model(text_encoder),
         tokenizer=tokenizer,
         unet=accelerator.unwrap_model(unet),
-        guidance_encoder_flame = guidance_encoder_flame, # we add the guidance encoder
+        # guidance_encoder_flame = guidance_encoder_flame, # we add the guidance encoder
         safety_checker=None,
         revision=args.revision,
         torch_dtype=weight_dtype,
@@ -231,38 +235,56 @@ def log_validation(vae, text_encoder, tokenizer, unet, args, accelerator, weight
     else:
         generator = torch.Generator(device=accelerator.device).manual_seed(args.seed)
 
-    images = []
-    for i in range(len(args.validation_prompts)):
-        print(args.validation_prompts)
-        with torch.autocast("cuda"):
-            image = pipeline(prompt=args.validation_prompts[i], num_inference_steps=20, generator=generator).images[0]
+  # Load prompts from the demonstration file
+    with open(args.demonstration_file, 'r') as f:
+        prompts_dict = json.load(f)
 
+    images = []
+    for key, prompt in prompts_dict.items():
+        print(f"Generating image for prompt: {prompt}")
+        with torch.autocast("cuda"):
+            image = pipeline(prompt=prompt,
+             negative_prompt=negative_prompt,
+              num_inference_steps=900,
+               generator=generator,
+               height=args.image_height,  # Set the desired height
+                width=args.image_width     # Set the desired width
+                ).images[0]
         images.append(image)
 
-    import os
-    from datetime import datetime
+    # Convert images to a tensor
+    image_tensors = torch.stack([torch.from_numpy(np.array(img)).permute(2, 0, 1) for img in images])
 
     # Create the output directory if it doesn't exist
-    output_dir = "output_1024persteps"
+    output_dir = args.output_sample_image
     if not os.path.exists(output_dir):
         os.makedirs(output_dir)
 
+    # Generate grid picture
+    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+    grid_filename = f"grid_picture_{timestamp}.png"
+    grid_path = os.path.join(output_dir, grid_filename)
+    tensor_to_grid_picture(image_tensors, output_dir, filename=grid_filename)
+
+    print(f"Grid image saved at {grid_path}")
+        # Save individual images
+    if save_picture:
+        for i, image in enumerate(images):
+            image_filename = f"image_{i}_{timestamp}.png"
+            image_path = os.path.join(output_dir, image_filename)
+            image.save(image_path)
+            print(f"Individual image saved at {image_path}")
 
     del pipeline
-        # Save the image with a timestamped filename
-    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    image_path = os.path.join(output_dir, f"image_{i}_{timestamp}.png")
-    image.save(image_path)
-
-    print(f"Image saved at {image_path}")
     torch.cuda.empty_cache()
 
     return images
 
 ########################################################################
 # VF: function to get the predicted image from the noise residuals
-#
-
+# We want to predict the image from the noise residuals and send it back to 
+# LPIPs to compare with originals and get a loss
+# 
 def process_batch_image_pred_old(model_pred, timesteps, noisy_latents, noise_scheduler, vae):
     batch_size = model_pred.shape[0]
     denoised_latents_list = []
@@ -288,7 +310,6 @@ def process_batch_image_pred_old(model_pred, timesteps, noisy_latents, noise_sch
 
 
 def process_single_image(model_pred, timestep, noisy_latent, noise_scheduler,vae,model_dtype):
-    model_dtype = model_dtype 
     model_pred = model_pred.to(dtype=model_dtype)
     noisy_latent = noisy_latent.to(dtype=model_dtype)
     denoised_latents = noise_scheduler.step(
@@ -297,7 +318,7 @@ def process_single_image(model_pred, timestep, noisy_latent, noise_scheduler,vae
         sample=noisy_latent
     ).pred_original_sample
     scaled_denoised_latents = 1 / 0.18215 * denoised_latents
-    print(scaled_denoised_latents.shape)
+    # print(scaled_denoised_latents.shape)
     image_pred =  vae.decode(scaled_denoised_latents.unsqueeze(0)).sample
     return image_pred
 
@@ -333,9 +354,15 @@ def process_batch_image_pred(model_pred, timesteps, noisy_latents, noise_schedul
 
     # Decode the entire batch at once
     image_pred = denoised_latents_batch #vae.decode(denoised_latents_batch).sample
-    print(denoised_latents_batch.shape, denoised_latents_batch[0].shape)
+    # print(denoised_latents_batch.shape, denoised_latents_batch[0].shape)
 
     return image_pred
+
+def normalize_between_neg1_and_1(tensor):
+    min_val = tensor.min()
+    max_val = tensor.max()
+    normalized = 2 * (tensor - min_val) / (max_val - min_val) - 1
+    return normalized
 ##################################################################
 
 
@@ -813,22 +840,29 @@ def main(args):
     "model_name": args.pretrained_model_name_or_path,
     "resolution": args.resolution
 })
-
+    counter = 0
     for epoch in range(first_epoch, args.num_train_epochs):
         train_loss = 0.0
         # Determine the total number of batches
         total_batches = len(train_dataloader)
         # We remove the last batch to keep a smooth training function
-
+        # Calculate half of the batches
+        quarter_batches = num_update_steps_per_epoch // 4
+        half_batches = num_update_steps_per_epoch //2
         for step, batch in enumerate(train_dataloader):
-            if step == total_batches - 2:
-                break
-            # if step == 2:
-            #     break
+
+            if step == num_update_steps_per_epoch - 1:
+                continue
+            # Calculate if we're at half of the batches or the last batch
+            
+            is_quarter_or_halfway_or_last = (counter % (quarter_batches*args.gradient_accumulation_steps) == 0) # (step % (quarter_batches*3 - 1) == 0 ) or (step % (quarter_batches - 1) == 0 ) or (step % (half_batches - 1) == 0) or
+            #print('counter % (quarter_batches)', counter % (quarter_batches))
+            if counter == 0:
+                is_quarter_or_halfway_or_last = False
             with torch.no_grad():  # If you're not training the text encoder, use no_grad to save memory
                   text_embeddings = text_encoder(batch["input_ids"])[0]
 
-
+            counter += 1
             ###### figure out the training using guidance
             with accelerator.accumulate(model):
                 # Convert images to latent space
@@ -901,10 +935,14 @@ def main(args):
                 #     # Since we predict the noise instead of x_0, the original formulation is slightly changed.
                 #     # This is discussed in Section 4.2 of the same paper.
 
-                if args.snr_gamma is None:
+                if args.snr_gamma == 0:
                     l1_loss = F.l1_loss(model_pred.float(), target.float(), reduction="mean")
-                    lpips_value = lpips_loss(model_pred.float(), target.float()).mean()
-                    loss = l1_loss + lpips_value
+                    if args.lpips_loss_weight == 0:
+                        lpips_value = 0.0
+                    else:
+                        image_pred_batch = process_batch_image_pred(model_pred, timesteps, noisy_latents, noise_scheduler, vae,model_dtype)
+                        lpips_value = lpips_loss(normalize_between_neg1_and_1(image_pred_batch.float()), normalize_between_neg1_and_1(batch["pixel_values"].to(weight_dtype).float())).mean()
+                    loss = args.l1_loss_weight * l1_loss + args.lpips_loss_weight * lpips_value
 
                 else:
                     # Compute loss-weights as per Section 3.4 of https://arxiv.org/abs/2303.09556.
@@ -923,7 +961,6 @@ def main(args):
                     l1_loss = l1_loss.mean()
                         # perform guidance
                     #print(model_pred.shape)
-                    image_pred_batch = process_batch_image_pred(model_pred, timesteps, noisy_latents, noise_scheduler, vae,model_dtype)
                     # print('image_pred_batch',image_pred_batch.shape)
                     # print('timesteps',timesteps)
                     # print('noisy_latents',noisy_latents.shape)
@@ -950,8 +987,15 @@ def main(args):
                     
                     #print("image_pred shape:", image_pred.shape, model_pred.shape)
                     # print("original shape:", batch["pixel_values"].to(weight_dtype).shape)
-                    lpips_value = lpips_loss(image_pred_batch.float(), batch["pixel_values"].to(weight_dtype).float()).mean()
-                    loss = l1_loss + lpips_value
+                    if args.lpips_loss_weight == 0:
+                        lpips_value = 0.0
+                    else:
+                        image_pred_batch = process_batch_image_pred(model_pred, timesteps, noisy_latents, noise_scheduler, vae,model_dtype)
+
+                        lpips_value = lpips_loss(normalize_between_neg1_and_1(image_pred_batch.float()), normalize_between_neg1_and_1(batch["pixel_values"].to(weight_dtype).float())).mean()
+                    
+                    loss = args.l1_loss_weight * l1_loss + args.lpips_loss_weight * lpips_value
+
 
 
                 # Gather the losses across all processes for logging (if we use distributed training).
@@ -971,10 +1015,13 @@ def main(args):
                 ############################################################################
                 # VF: unallocated resources for the GPUs
                 #
-                torch.cuda.empty_cache()
-                del image_pred_batch
-                del lpips_value
-                del l1_loss
+                if args.lpips_loss_weight == 0:
+                    torch.cuda.empty_cache()
+                else:
+                    torch.cuda.empty_cache()
+                    del image_pred_batch
+                    del lpips_value
+                    del l1_loss
                 ############################################################################
 
             # Checks if the accelerator has performed an optimization step behind the scenes
@@ -1029,9 +1076,30 @@ def main(args):
 
             if global_step >= args.max_train_steps:
                 break
+            if is_quarter_or_halfway_or_last: # we run the validation evey half epochs
+            # Ensure all processes are synchronized before checking if it's the main process
+                #accelerator.wait_for_everyone()
+                print('Running the validation script')
+                accelerator.wait_for_everyone()
+                log_validation(
+                    vae,
+                    text_encoder,
+                    tokenizer,
+                    reference_unet,
+                    args,
+                    accelerator,
+                    weight_dtype,
+                    guidance_encoder_flame
+                )
+
 
         if accelerator.is_main_process:
-            if args.validation_prompts is not None and epoch % args.validation_epochs == 0:
+            # Run validation every half epoch
+            if is_quarter_or_halfway_or_last: # we run the validation evey half epochs
+            # Ensure all processes are synchronized before checking if it's the main process
+                #accelerator.wait_for_everyone()
+                print('Running the validation script')
+                accelerator.wait_for_everyone()
                 if args.use_ema:
                     # Store the UNet parameters temporarily and load the EMA parameters to perform inference.
                     ema_unet.store(reference_unet.parameters())
@@ -1077,26 +1145,16 @@ def main(args):
         pipeline.save_pretrained(args.output_dir)
 
         # Run a final round of inference.
-        images = []
-        if args.validation_prompts is not None:
-            logger.info("Running inference for collecting generated images...")
-            pipeline = pipeline.to(accelerator.device)
-            pipeline.torch_dtype = weight_dtype
-            pipeline.set_progress_bar_config(disable=True)
-
-            if args.enable_xformers_memory_efficient_attention:
-                pipeline.enable_xformers_memory_efficient_attention()
-
-            if args.seed is None:
-                generator = None
-            else:
-                generator = torch.Generator(device=accelerator.device).manual_seed(args.seed)
-
-            for i in range(len(args.validation_prompts)):
-                print(args.validation_prompts)
-                with torch.autocast("cuda"):
-                    image = pipeline(multi_guidance_lst = "",prompt = args.validation_prompts[i], num_inference_steps=20, generator=generator).images[0]
-                images.append(image)
+        log_validation(
+                    vae,
+                    text_encoder,
+                    tokenizer,
+                    reference_unet,
+                    args,
+                    accelerator,
+                    weight_dtype,
+                    guidance_encoder_flame
+                )
 
         if args.push_to_hub:
             save_model_card(args, repo_id, images, repo_folder=args.output_dir)
